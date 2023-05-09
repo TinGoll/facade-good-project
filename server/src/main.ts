@@ -1,9 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const httpsOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/facade-good.ru/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/facade-good.ru/fullchain.pem'),
+  };
+
+  const app = await NestFactory.create(AppModule, {
+    httpsOptions,
+  });
+
   const config = app.get(ConfigService);
   const port = config.get<number>('API_PORT');
 

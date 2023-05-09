@@ -2,21 +2,19 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PhotoGalleryModule } from './photo-gallery/photo-gallery.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { FileSystemModule } from './file-system/file-system.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `${
-        process.env.NODE_ENV === 'development'
-          ? '.env.development'
-          : '.env.production'
-      }`,
+      envFilePath: `../.env`,
     }),
     ServeStaticModule.forRoot({
       rootPath: resolve(process.env.MULTER_DEST || 'assets'),

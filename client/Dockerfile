@@ -4,18 +4,14 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install
-RUN npm run clean
-RUN npm rebuild
-RUN npm run build
+RUN npm install && \
+    npm run clean && \
+    npm rebuild && \
+    npm run build && \
+    mv public ../public
 
-FROM nginx:stable-alpine AS deploy
+FROM nginx:latest
 
+COPY --from=builder /app/../public /usr/share/nginx/html
 
-WORKDIR /usr/share/nginx/html
-
-RUN rm -rf ./*
-
-COPY --from=builder /app/public .
 EXPOSE 80
-ENTRYPOINT [ "nginx", "-g", "daemon off;" ]

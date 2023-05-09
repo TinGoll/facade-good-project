@@ -1,11 +1,63 @@
-version: '3'
+version: '3.9'
 
 services:
-  app:
-    build: ./facade-good
+  db:
+    container_name: postgres-facade-good
+    image: postgres:14.0-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${TYPEORM_USERNAME}
+      - POSTGRES_PASSWORD=${TYPEORM_PASSWORD}
+      - POSTGRES_DB=${TYPEORM_DATABASE}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     ports:
-      - "3000:3000"
+      - ${TYPEORM_PORT}:${TYPEORM_PORT}
+  server:
+    container_name: server-facade-good
+    build:
+      context: ./server
+    depends_on:
+      - db
+    restart: unless-stopped
+    ports:
+      - '${API_PORT}:3000'
+    environment:
+      - API_PORT=${API_PORT}
+      - TYPEORM_CONNECTION=${TYPEORM_CONNECTION}
+      - TYPEORM_USERNAME=${TYPEORM_USERNAME}
+      - TYPEORM_PASSWORD=${TYPEORM_PASSWORD}
+      - TYPEORM_DATABASE=${TYPEORM_DATABASE}
+      - TYPEORM_PORT=${TYPEORM_PORT}
+      - TYPEORM_HOST=db
+      - MULTER_DEST=${MULTER_DEST}
+      - IMAGES_FOLDER=${IMAGES_FOLDER}
+    volumes:
+      - assets:/app/assets
+      - etc-letsencrypt:/etc/letsencrypt
+  client:
+    container_name: facade-good-client
+    build: ./client
+    depends_on:
+      - server
+    volumes:
+      - www-html:/usr/share/nginx/html
   nginx:
-    build: ./nginx
+    image: nginx:latest
+    container_name: facade-good-nginx
+    depends_on:
+      - client
+      - server
     ports:
       - "80:80"
+      - '443:443'
+    volumes:
+      - www-html:/usr/share/nginx/html
+      - etc-letsencrypt:/etc/letsencrypt
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    
+volumes:
+  www-html:
+  etc-letsencrypt:
+  pgdata:
+  assets:
