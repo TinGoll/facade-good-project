@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as sharp from 'sharp';
 import { CreateGalleryImageInput } from '../inputs/create.image.input';
 import nanoid from 'src/cammon/nanoid';
+import * as fs from 'fs';
 
 @Injectable()
 export class SharpPipe
@@ -21,6 +22,17 @@ export class SharpPipe
     const assetsPath: string =
       this.configService.get('MULTER_DEST') || 'assets';
     const imagesFolder = this.configService.get('IMAGES_FOLDER') || 'images';
+
+    const folderPath = path.resolve(assetsPath, imagesFolder);
+
+    console.log("Путь", folderPath);
+    
+
+    if (!fs.existsSync(folderPath)) {
+      console.log("Папка " + folderPath, "Не найдена, создаем");
+      
+      await fs.promises.mkdir(folderPath);
+    }
 
     const inputs = await Promise.all(
       images.map(async (image) => {
@@ -59,5 +71,4 @@ export class SharpPipe
 
     return inputs;
   }
-
 }

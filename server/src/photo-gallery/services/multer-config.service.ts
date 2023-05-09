@@ -20,12 +20,8 @@ export class MulterConfigService implements MulterOptionsFactory {
       this.configService.get('IMAGES_FOLDER') || 'images';
 
     const folderPath = resolve(path, imagesFolder);
-    console.log("Директория", folderPath);
-    
 
     if (!fs.existsSync(folderPath)) {
-      console.log("Директории не существует");
-      
       await fs.promises.mkdir(folderPath);
     }
 
