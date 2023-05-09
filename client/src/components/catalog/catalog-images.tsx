@@ -76,7 +76,7 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
                 {images.length && (
                   <img
                     className="SwiperImg"
-                    src={`${process.env.GATSBY_API_HOST}:${process.env.GATSBY_API_PORT}/images/${images[0].filename}.webp`}
+                    src={`https://facade-good.ru:3000/images/${images[0].filename}.webp`}
                     alt={item.title}
                   />
                 )}
@@ -92,7 +92,7 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
                 {scheme.length && (
                   <img
                     className="SwiperImg"
-                    src={`${process.env.GATSBY_API_HOST}:${process.env.GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
+                    src={`https://facade-good.ru:3000/images/${scheme[0].filename}.webp`}
                     alt={item.title}
                   />
                 )}

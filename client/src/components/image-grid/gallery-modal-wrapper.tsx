@@ -19,7 +19,7 @@ const GalleryModalWrapper: FC<GalleryModalWrapperProps> = ({
       onClose={onClose}
     >
       <ModalImg
-        src={`${process.env.GATSBY_API_HOST}:${process.env.GATSBY_API_PORT}/images/${images[0]?.filename}.webp`}
+        src={`https://facade-good.ru:3000/images/${images[0]?.filename}.webp`}
         alt={item?.title}
       />
     </GalleryModal>

@@ -40,6 +40,9 @@ services:
     build: ./client
     depends_on:
       - server
+    environment:
+      - GATSBY_API_HOST=https://facade-good.ru
+      - GATSBY_API_PORT=3000
     volumes:
       - www-html:/usr/share/nginx/html
   nginx:
@@ -51,9 +54,6 @@ services:
     ports:
       - "80:80"
       - '443:443'
-    environment:
-      - GATSBY_API_HOST=${GATSBY_API_HOST}
-      - GATSBY_API_PORT=${GATSBY_API_PORT}
     volumes:
       - www-html:/usr/share/nginx/html
       - etc-letsencrypt:/etc/letsencrypt
