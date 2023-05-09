@@ -51,6 +51,9 @@ services:
     ports:
       - "80:80"
       - '443:443'
+    environment:
+      - GATSBY_API_HOST=${GATSBY_API_HOST}
+      - GATSBY_API_PORT=${GATSBY_API_PORT}
     volumes:
       - www-html:/usr/share/nginx/html
       - etc-letsencrypt:/etc/letsencrypt
