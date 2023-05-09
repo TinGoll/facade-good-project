@@ -8,15 +8,22 @@ import { diskStorage } from 'multer';
 import { join, resolve } from 'path';
 import * as sharp from 'sharp';
 import nanoid from 'src/cammon/nanoid';
+import * as fs from 'fs';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
 
-  createMulterOptions(): MulterModuleOptions {
+  async createMulterOptions(): Promise<MulterModuleOptions> {
     const path: string = this.configService.get('MULTER_DEST') || 'assets';
     const imagesFolder: string =
       this.configService.get('IMAGES_FOLDER') || 'images';
+
+    const folderPath = resolve(path, imagesFolder);
+
+    if (!fs.existsSync(folderPath)) {
+      await fs.promises.mkdir(folderPath);
+    }
 
     return {
       storage: diskStorage({
@@ -24,12 +31,11 @@ export class MulterConfigService implements MulterOptionsFactory {
           return cb(null, join(path, imagesFolder));
         },
         filename: (req, file, cb) => {
+          console.log('filename >>>>>>>>>>>>>>>>', file);
 
-            console.log("filename >>>>>>>>>>>>>>>>", file);
-            
-            const filename = nanoid();
-            const extension = file.mimetype.split('/').pop();
-     
+          const filename = nanoid();
+          const extension = file.mimetype.split('/').pop();
+
           // Use Sharp.js to resize and save image in jpeg format
           sharp(file.buffer)
             .resize(800)
