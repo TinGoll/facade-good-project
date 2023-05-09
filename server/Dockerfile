@@ -10,4 +10,11 @@ FROM node:16-alpine
 WORKDIR /app
 COPY --from=builder /app ./
 EXPOSE 3000
+
+# добавлены строки для сохранения изображений в папку assets
+RUN mkdir -p /app/assets/images
+RUN chown -R node:node /app/assets
+
+USER node
+
 CMD ["npm", "run", "start:prod"]

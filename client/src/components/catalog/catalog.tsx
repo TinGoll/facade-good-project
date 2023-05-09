@@ -41,15 +41,6 @@ const Catalog = React.memo(() => {
         </HeadTextWrapper>
         <CatalogLinks linkNames={catigories} css={{ marginTop: 60 }} />
         <Carousel loading={loading} items={items} error={error?.message} />
-        {/* <PrimaryButton
-          css={{
-            ...theme.typography.buttonText,
-            display: "block",
-            margin: "30px auto",
-          }}
-        >
-          Перейти в каталог
-        </PrimaryButton> */}
       </Container>
     </SiteSection>
   );
