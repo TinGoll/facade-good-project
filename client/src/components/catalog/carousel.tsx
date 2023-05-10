@@ -47,7 +47,7 @@ const Carousel: React.FC<CarouselProps> = ({ items = [], loading, error }) => {
   }
 
   if (error) {
-    return <div>Ошибка загрузки... {error}</div>;
+    return <div>Ошибка загрузки: {`${GATSBY_API_HOST}:${GATSBY_API_PORT} - ${error}`}</div>;
   }
 
   return (
