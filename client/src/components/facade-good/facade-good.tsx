@@ -338,7 +338,6 @@ export const CardTitle = ({
       css={(theme) => [
         {
           textAlign: "left",
-          marginTop: 10,
           marginBottom: 10,
           ...theme.typography.cardName,
         },
@@ -353,9 +352,9 @@ export const CardTitle = ({
 
 export const CardImgBox = styled(Box)(({ theme }) => ({
   width: "100%",
-  height: 391,
+  height: 460,
   borderRadius: "5px",
-  background: theme.colors.bg2,
+  background: theme.colors.white,
   overflow: "hidden",
 }));
 
@@ -366,7 +365,7 @@ export const CardSchemeBox = styled(Box)<{ schemeheight?: number }>(
     width: "100%",
     height: schemeheight,
     borderRadius: "5px",
-    background: theme.colors.bg2,
+    background: theme.colors.white,
     overflow: "hidden",
     "& img": {
       objectFit: "cover",
@@ -426,7 +425,7 @@ export const CardParamItem = ({
 
 export const CardPrice = styled(Typography)(({ theme }) => ({
   ...theme.typography.cardPrice,
-  textAlign: "left",
+  textAlign: "right",
   marginLeft: 15,
   marginRight: 15,
   flexGrow: 1,

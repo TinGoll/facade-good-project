@@ -153,7 +153,7 @@ export const getTheme = (): FacadeGood.CustomTheme => {
         fontFamily: fontFamily.body,
         fontStyle: "normal",
         fontWeight: fontWeight.md,
-        fontSize: "24px",
+        fontSize: "22px",
         lineHeight: "28px",
         color: colors.black,
       },

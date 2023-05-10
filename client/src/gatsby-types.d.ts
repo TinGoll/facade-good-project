@@ -1339,7 +1339,7 @@ type MdxFilterListInput = {
 
 type MdxFrontmatter = {
   readonly description: Maybe<Scalars['String']>;
-  readonly hero_image: Maybe<Scalars['String']>;
+  readonly hero_image: Maybe<File>;
   readonly hero_image_alt: Maybe<Scalars['String']>;
   readonly link: Maybe<Scalars['String']>;
   readonly params: Maybe<Scalars['String']>;
@@ -1350,7 +1350,7 @@ type MdxFrontmatter = {
 
 type MdxFrontmatterFieldSelector = {
   readonly description: InputMaybe<FieldSelectorEnum>;
-  readonly hero_image: InputMaybe<FieldSelectorEnum>;
+  readonly hero_image: InputMaybe<FileFieldSelector>;
   readonly hero_image_alt: InputMaybe<FieldSelectorEnum>;
   readonly link: InputMaybe<FieldSelectorEnum>;
   readonly params: InputMaybe<FieldSelectorEnum>;
@@ -1361,7 +1361,7 @@ type MdxFrontmatterFieldSelector = {
 
 type MdxFrontmatterFilterInput = {
   readonly description: InputMaybe<StringQueryOperatorInput>;
-  readonly hero_image: InputMaybe<StringQueryOperatorInput>;
+  readonly hero_image: InputMaybe<FileFilterInput>;
   readonly hero_image_alt: InputMaybe<StringQueryOperatorInput>;
   readonly link: InputMaybe<StringQueryOperatorInput>;
   readonly params: InputMaybe<StringQueryOperatorInput>;
@@ -1372,7 +1372,7 @@ type MdxFrontmatterFilterInput = {
 
 type MdxFrontmatterSortInput = {
   readonly description: InputMaybe<SortOrderEnum>;
-  readonly hero_image: InputMaybe<SortOrderEnum>;
+  readonly hero_image: InputMaybe<FileSortInput>;
   readonly hero_image_alt: InputMaybe<SortOrderEnum>;
   readonly link: InputMaybe<SortOrderEnum>;
   readonly params: InputMaybe<SortOrderEnum>;

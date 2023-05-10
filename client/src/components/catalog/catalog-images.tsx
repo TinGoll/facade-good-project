@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Box,
   Card,
   CardDescription,
   CardFooter,
@@ -8,6 +9,7 @@ import {
   CardSchemeBox,
   CardTitle,
   Divider,
+  Typography,
 } from "../facade-good/facade-good";
 import { useQuery } from "@apollo/client";
 import {
@@ -16,6 +18,9 @@ import {
 } from "../../gatsby-plugin-apollo/queries/gallery.query";
 import { CatalogImageGrid, CatalogImageWrapper } from "./catalog-image-grid";
 import { GATSBY_API_HOST, GATSBY_API_PORT } from "../../settings/api.settings";
+import { useTheme } from "@emotion/react";
+import { FacadeGood } from "../../app-types";
+import { getSubtitle } from "../../utils/get-subtitle";
 
 interface CatalogImageProps {
   category: "Массив" | "МДФ" | "Комплектующие";
@@ -35,6 +40,7 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
     }
   );
   const [items, setItems] = React.useState<GalleryImages.Item[]>([]);
+  const theme = useTheme() as FacadeGood.CustomTheme;
 
   React.useEffect(() => {
     if (!loading) {
@@ -72,7 +78,7 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
                 },
               }}
             >
-              <CardTitle>{item.title}</CardTitle>
+              <CardTitle>{`Фасад: ${item.title}`}</CardTitle>
               <CardImgBox>
                 {images.length && (
                   <img
@@ -82,25 +88,48 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
                   />
                 )}
               </CardImgBox>
-              <CardDescription>{item.subtitle}</CardDescription>
-              <Divider my={15} />
               {/* <CardParams>
                 <CardParamItem>234х546</CardParamItem>
                 <CardParamItem>234х546</CardParamItem>
                 <CardParamItem>234х546</CardParamItem>
               </CardParams> */}
-              <CardSchemeBox schemeheight={60}>
-                {scheme.length && (
+              {scheme.length ? (
+                <CardSchemeBox css={{ marginTop: 10 }} schemeheight={60}>
                   <img
                     className="SwiperImg"
                     src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
                     alt={item.title}
                   />
-                )}
-              </CardSchemeBox>
+                </CardSchemeBox>
+              ) : (
+                <CardSchemeBox
+                  css={{ marginTop: 10 }}
+                  schemeheight={60}
+                ></CardSchemeBox>
+              )}
               <CardFooter>
-                <CardPrice>{item.params ? item.params : ""}</CardPrice>
-                {/* <CardButton>Подробнее</CardButton> */}
+                <Box
+                  css={{
+                    flexGrow: 1,
+                    paddingLeft: 20,
+                  }}
+                >
+                  <Typography
+                    css={{
+                      fontWeight: 400,
+                      color: theme.colors.cardTextSecondary,
+                    }}
+                  >{`Материал: ${getSubtitle(item.subtitle)[0]}`}</Typography>
+                  {getSubtitle(item.subtitle)[1] && (
+                    <Typography
+                      css={{
+                        fontWeight: 400,
+                        color: theme.colors.cardTextSecondary,
+                      }}
+                    >{`(${getSubtitle(item.subtitle)[1]})`}</Typography>
+                  )}
+                </Box>
+                <CardPrice>{item.params ? `${item.params}` : "от 5000 р."}</CardPrice>
               </CardFooter>
             </Card>
           </CatalogImageWrapper>
