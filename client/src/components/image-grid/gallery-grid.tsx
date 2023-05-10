@@ -3,6 +3,7 @@ import React from "react";
 import { Box, EmotionProps, Typography } from "../facade-good/facade-good";
 import { GalleryImages } from "../../gatsby-plugin-apollo/queries/gallery.query";
 import { FacadeGood } from "../../app-types";
+import { GATSBY_API_HOST, GATSBY_API_PORT } from "../../settings/api.settings";
 
 export const ImageGrid = styled(Box)<{ imageSize?: number }>((props) => ({
   display: "grid",
@@ -93,7 +94,7 @@ const GalleryGrid = ({
             {images.length && (
               <img
                 className="SwiperImg"
-                src={`https://facade-good.ru:3000/images/${images[0].filename}.webp`}
+                src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
                 alt={item.title}
               />
             )}

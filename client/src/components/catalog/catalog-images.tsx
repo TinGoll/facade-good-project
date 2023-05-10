@@ -15,6 +15,7 @@ import {
   GALLERY_GET_ALL,
 } from "../../gatsby-plugin-apollo/queries/gallery.query";
 import { CatalogImageGrid, CatalogImageWrapper } from "./catalog-image-grid";
+import { GATSBY_API_HOST, GATSBY_API_PORT } from "../../settings/api.settings";
 
 interface CatalogImageProps {
   category: "Массив" | "МДФ" | "Комплектующие";
@@ -76,7 +77,7 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
                 {images.length && (
                   <img
                     className="SwiperImg"
-                    src={`https://facade-good.ru:3000/images/${images[0].filename}.webp`}
+                    src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
                     alt={item.title}
                   />
                 )}
@@ -92,7 +93,7 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
                 {scheme.length && (
                   <img
                     className="SwiperImg"
-                    src={`https://facade-good.ru:3000/images/${scheme[0].filename}.webp`}
+                    src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
                     alt={item.title}
                   />
                 )}

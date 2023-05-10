@@ -22,6 +22,7 @@ import {
 import { GalleryImages } from "../../gatsby-plugin-apollo/queries/gallery.query";
 import { navigate } from "gatsby";
 import { CatalogCategory } from "./catalog-links";
+import { GATSBY_API_HOST, GATSBY_API_PORT } from "../../settings/api.settings";
 
 const LINK_TYPE1: CatalogCategory = "Массив";
 const LINK_TYPE2: CatalogCategory = "МДФ";
@@ -114,7 +115,7 @@ const Carousel: React.FC<CarouselProps> = ({ items = [], loading, error }) => {
                 {images.length && (
                   <img
                     className="SwiperImg"
-                    src={`https://facade-good.ru:3000/images/${images[0].filename}.webp`}
+                    src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
                     alt={item.title}
                   />
                 )}
@@ -130,7 +131,7 @@ const Carousel: React.FC<CarouselProps> = ({ items = [], loading, error }) => {
                 {scheme.length && (
                   <img
                     className="SwiperImg"
-                    src={`https://facade-good.ru:3000/images/${scheme[0].filename}.webp`}
+                    src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
                     alt={item.title}
                   />
                 )}

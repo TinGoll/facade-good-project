@@ -1,10 +1,11 @@
 import fetch from "isomorphic-fetch";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { GATSBY_API_HOST, GATSBY_API_PORT } from "../settings/api.settings";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: `https://facade-good.ru:3000/graphql`,
+    uri: `${GATSBY_API_HOST}:${GATSBY_API_PORT}/graphql`,
     fetch,
   }),
 });
@@ -12,4 +13,3 @@ const client = new ApolloClient({
 export default client;
 
 // uri: `${process.env.GATSBY_API_HOST}:${process.env.GATSBY_API_PORT}/graphql`,
-

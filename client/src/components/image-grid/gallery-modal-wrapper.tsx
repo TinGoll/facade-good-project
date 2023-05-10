@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import GalleryModal, { ModalImg } from "./gallery-modal";
 import { GalleryImages } from "../../gatsby-plugin-apollo/queries/gallery.query";
+import { GATSBY_API_HOST, GATSBY_API_PORT } from "../../settings/api.settings";
 
 interface GalleryModalWrapperProps {
   item?: GalleryImages.Item | null;
@@ -19,7 +20,7 @@ const GalleryModalWrapper: FC<GalleryModalWrapperProps> = ({
       onClose={onClose}
     >
       <ModalImg
-        src={`https://facade-good.ru:3000/images/${images[0]?.filename}.webp`}
+        src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0]?.filename}.webp`}
         alt={item?.title}
       />
     </GalleryModal>
