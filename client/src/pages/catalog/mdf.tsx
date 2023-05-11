@@ -16,6 +16,7 @@ import { FacadeGood } from "../../app-types";
 import CatalogImages from "../../components/catalog/catalog-images";
 import { GalleryImages } from "../../gatsby-plugin-apollo/queries/gallery.query";
 import GalleryModalWrapper from "../../components/image-grid/gallery-modal-wrapper";
+import ScrollToTop from "../../components/scroll/scroll-to-top";
 
 const MdfPage: React.FC<PageProps> = ({ location, params }) => {
   /******************************************** */
@@ -29,6 +30,7 @@ const MdfPage: React.FC<PageProps> = ({ location, params }) => {
 
   return (
     <AppLayout>
+      <ScrollToTop />
       <SiteHeadder stycky />
       <Main
         css={{

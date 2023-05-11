@@ -2,7 +2,7 @@ import { css, Interpolation } from "@emotion/react";
 import styled from "@emotion/styled";
 import { GatsbyLinkProps, Link } from "gatsby";
 
-import React, { ImgHTMLAttributes, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { FacadeGood } from "../../app-types";
 import SvgArrowDown from "./svg/svg-arrow-down";
 import SvgArrowRight from "./svg/svg-arrow-right";

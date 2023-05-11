@@ -129,7 +129,7 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
                     >{`(${getSubtitle(item.subtitle)[1]})`}</Typography>
                   )}
                 </Box>
-                <CardPrice>{item.params ? `${item.params}` : "от 5000 р."}</CardPrice>
+                <CardPrice>{item.params ? `${item.params}` : ""}</CardPrice>
               </CardFooter>
             </Card>
           </CatalogImageWrapper>

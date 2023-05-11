@@ -1,49 +1,63 @@
-import * as React from "react"
-import { Link, HeadFC, PageProps } from "gatsby"
+import * as React from "react";
+import { Link, HeadFC, PageProps } from "gatsby";
+import { Typography } from "../components/facade-good/facade-good";
+import styled from "@emotion/styled";
 
-const pageStyles = {
-  color: "#232129",
-  padding: "96px",
-  fontFamily: "-apple-system, Roboto, sans-serif, serif",
-}
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-}
+const H1 = styled("h1")`
+  font-size: 160px;
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: 20px;
+`;
+const H2 = styled("h2")``;
 
-const paragraphStyles = {
-  marginBottom: 48,
-}
-const codeStyles = {
-  color: "#8A6534",
-  padding: 4,
-  backgroundColor: "#FFF4DB",
-  fontSize: "1.25rem",
-  borderRadius: 4,
-}
+const Main = styled("main")`
+  min-height: 100vh;
+  background-image: linear-gradient(125deg, #6a89cc, #b8e994);
+  position: relative;
+`;
+
+const Container = styled("div")`
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: #343434;
+`;
+
+const Link404 = styled(Link)`
+  text-decoration: none;
+  text-transform: uppercase;
+  background: #ffb421;
+  color: #343434;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 12px 14px;
+  display: inline-block;
+  border-radius: 25px;
+  transition: 0.4s;
+  margin-top: 20px;
+  :hover {
+    background: #f1b84a;
+  }
+`;
 
 const NotFoundPage: React.FC<PageProps> = () => {
   return (
-    <main style={pageStyles}>
-      <h1 style={headingStyles}>Page not found</h1>
-      <p style={paragraphStyles}>
-        Sorry 😔, we couldn’t find what you were looking for.
-        <br />
-        {process.env.NODE_ENV === "development" ? (
-          <>
-            <br />
-            Try creating a page in <code style={codeStyles}>src/pages/</code>.
-            <br />
-          </>
-        ) : null}
-        <br />
-        <Link to="/">Go home</Link>.
-      </p>
-    </main>
-  )
-}
+    <Main>
+      <Container>
+        <H2>Страница не найдена</H2>
+        <H1>404</H1>
+        <Typography>
+          К сожалению, запрашиваемая вами страница не найдена.
+        </Typography>
+        <Link404 to="/">Вернутся на главную</Link404>
+      </Container>
+    </Main>
+  );
+};
 
-export default NotFoundPage
+export default NotFoundPage;
 
-export const Head: HeadFC = () => <title>Not found</title>
+export const Head: HeadFC = () => <title>Страница не найдена</title>;

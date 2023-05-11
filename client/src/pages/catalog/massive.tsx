@@ -17,6 +17,7 @@ import { FacadeGood } from "../../app-types";
 import { navigate } from "gatsby";
 import { GalleryImages } from "../../gatsby-plugin-apollo/queries/gallery.query";
 import GalleryModalWrapper from "../../components/image-grid/gallery-modal-wrapper";
+import ScrollToTop from "../../components/scroll/scroll-to-top";
 
 const MassivePage: React.FC<PageProps> = ({ location, params }) => {
   /******************************************** */
@@ -33,6 +34,7 @@ const MassivePage: React.FC<PageProps> = ({ location, params }) => {
 
   return (
     <AppLayout>
+      <ScrollToTop />
       <SiteHeadder stycky />
       <Main
         css={{

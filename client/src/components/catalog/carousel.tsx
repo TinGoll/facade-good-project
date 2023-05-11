@@ -184,35 +184,3 @@ const Carousel: React.FC<CarouselProps> = ({ items = [], loading, error }) => {
 
 export default Carousel;
 
-/**
- * <SwiperSlide key={index}>
-          <Card>
-            <CardTitle>Название товара</CardTitle>
-            <CardImgBox>
-              <StaticImage
-                style={{
-                  objectFit: "cover",
-                  width: "100%",
-                  height: "100%",
-                }}
-                alt="Картинка"
-                src="../../images/background/facade-good-bg.jpg"
-                loading="lazy"
-              />
-            </CardImgBox>
-            <CardDescription>
-              Lorem ipsum dolor sit amet, consectetur.
-            </CardDescription>
-            <Divider my={15} />
-            <CardParams>
-              <CardParamItem>234х546</CardParamItem>
-              <CardParamItem>234х546</CardParamItem>
-              <CardParamItem>234х546</CardParamItem>
-            </CardParams>
-            <CardFooter>
-              <CardPrice>от 5000 р.</CardPrice>
-              <CardButton>Подробнее</CardButton>
-            </CardFooter>
-          </Card>
-        </SwiperSlide>
- */

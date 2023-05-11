@@ -20,9 +20,9 @@ import {
 } from "../gatsby-plugin-apollo/queries/gallery.query";
 import GalleryGrid from "../components/image-grid/gallery-grid";
 import GalleryModalWrapper from "../components/image-grid/gallery-modal-wrapper";
+import ScrollToTop from "../components/scroll/scroll-to-top";
 
 const GalleryPage = () => {
-  
   /******************************************** */
   // Для открытия фото в модальном окне
   const [galleryItem, setGalleryItem] =
@@ -47,6 +47,7 @@ const GalleryPage = () => {
 
   return (
     <AppLayout>
+      <ScrollToTop />
       <SiteHeadder stycky />
       <Main
         css={{

@@ -17,6 +17,7 @@ import CatalogImages from "../../components/catalog/catalog-images";
 import { navigate } from "gatsby";
 import { GalleryImages } from "../../gatsby-plugin-apollo/queries/gallery.query";
 import GalleryModalWrapper from "../../components/image-grid/gallery-modal-wrapper";
+import ScrollToTop from "../../components/scroll/scroll-to-top";
 
 const AccessoriesPage: React.FC<PageProps> = ({ location, params }) => {
   const params1 = new URLSearchParams(location.search);
@@ -33,6 +34,7 @@ const AccessoriesPage: React.FC<PageProps> = ({ location, params }) => {
 
   return (
     <AppLayout>
+      <ScrollToTop />
       <SiteHeadder stycky />
       <Main
         css={{
