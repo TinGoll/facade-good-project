@@ -9,11 +9,13 @@ import {
   UseInterceptors,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { CreateGalleryItemInput } from '../inputs/create.item.input';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { GalleryService } from '../services/gallery.service';
 import { SharpPipe } from '../pipes/sharp.pipe';
+import { UpdateGalleryItemInput } from '../inputs/update.item.input';
 
 @Controller('api/gallery')
 export class GalleryController {
@@ -45,6 +47,11 @@ export class GalleryController {
   @Post('items')
   create(@Body() input: CreateGalleryItemInput) {
     return this.galleryService.create(input);
+  }
+
+  @Put('items')
+  update(@Body() item: UpdateGalleryItemInput) {
+    return this.galleryService.update(item);
   }
 
   @Post('images/:itemId')

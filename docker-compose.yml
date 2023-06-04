@@ -5,8 +5,10 @@ services:
     container_name: postgres-facade-good
     image: postgres:14.0-alpine
     restart: always
-    expose:
-      - 5432
+    # expose:
+    #   - 5432
+    ports:
+      - "${TYPEORM_PORT}:5432"
     environment:
       - POSTGRES_USER=${TYPEORM_USERNAME}
       - POSTGRES_PASSWORD=${TYPEORM_PASSWORD}

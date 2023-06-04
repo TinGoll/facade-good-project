@@ -9,6 +9,7 @@ import SvgArrowRight from "./svg/svg-arrow-right";
 import SvgPaginationLeft from "./svg/svg-pagination-left";
 import SvgPaginationRight from "./svg/svg-pagination-right";
 import { motion, useAnimation, useInView } from "framer-motion";
+import Select from "./form-components/select";
 
 export interface EmotionProps<T> extends React.HTMLAttributes<T> {
   css?: Interpolation<any>;
@@ -79,12 +80,11 @@ export const Typography: React.FC<EmotionProps<HTMLParagraphElement>> = ({
   <p css={css} {...props} />
 );
 
-export const Button: React.FC<EmotionProps<HTMLButtonElement>> = ({
-  css,
-  ...props
-}) => (
+export const Button: React.FC<
+  EmotionProps<HTMLButtonElement> & { disabled?: boolean; loading?: boolean }
+> = ({ css, disabled, loading, ...props }) => (
   //@ts-ignore
-  <button css={css} {...props} />
+  <button disabled={disabled || loading} css={css} {...props} />
 );
 
 export const Span: React.FC<EmotionProps<HTMLSpanElement>> = ({
@@ -135,23 +135,31 @@ export const Container = styled(Box)(({ theme }) => ({
   ...theme.container,
 }));
 
-export const PrimaryButton = styled(Button)(({ theme }) => ({
+export const PrimaryButton = styled(Button)<{
+  disabled?: boolean;
+  loading?: boolean;
+}>(({ theme, disabled, loading }) => ({
   ...theme.typography.buttonText,
+  color:
+    disabled || loading ? theme.colors.bg2 : theme.typography.buttonText.color,
   boxShadow: "0px 4px 13px rgba(0, 0, 0, 0.05)",
   padding: "0.5rem 1rem",
   borderRadius: "90px",
   border: "none",
-  backgroundColor: theme.colors.button.normal,
-  cursor: "pointer",
+  backgroundColor:
+    disabled || loading ? theme.colors.bg3 : theme.colors.button.normal,
+  cursor: disabled || loading ? (loading ? "progress" : "auto") : "pointer",
   outline: "none",
   textAlign: "center",
   width: 297,
   height: 64,
   ["&:hover"]: {
-    backgroundColor: theme.colors.button.hover,
+    backgroundColor:
+      disabled || loading ? theme.colors.bg3 : theme.colors.button.hover,
   },
   [":active"]: {
-    backgroundColor: theme.colors.button.active,
+    backgroundColor:
+      disabled || loading ? theme.colors.bg3 : theme.colors.button.active,
   },
 }));
 
@@ -357,8 +365,6 @@ export const CardImgBox = styled(Box)(({ theme }) => ({
   background: theme.colors.white,
   overflow: "hidden",
 }));
-
-
 
 export const CardSchemeBox = styled(Box)<{ schemeheight?: number }>(
   ({ theme, schemeheight = 100 }) => ({

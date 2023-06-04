@@ -15,6 +15,7 @@ declare module FacadeGood {
     footerText: string;
     buttonText: string;
     warning: string;
+    danger: string;
     error: string;
     info: string;
     white: string;
@@ -23,7 +24,10 @@ declare module FacadeGood {
     bg0: string;
     bg1: string;
     bg2: string;
+    bg3: string;
     border: string;
+    listSelected: string;
+    listHighlighted: string;
   }
 
   export interface FontFamily {

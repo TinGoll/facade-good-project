@@ -7,6 +7,7 @@ import { FileSystemModule } from './file-system/file-system.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { OrderModule } from './order/order.module';
 
 
 
@@ -48,6 +49,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
     PhotoGalleryModule,
     FileSystemModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [],

@@ -32,8 +32,14 @@ const GalleryPage = () => {
   }, []);
   /******************************************** */
 
-  const { data, loading, error } =
-    useQuery<GalleryImages.Root>(GALLERY_GET_ALL);
+  const { data, loading, error } = useQuery<GalleryImages.Root>(
+    GALLERY_GET_ALL,
+    {
+      variables: {
+        category: "Галерея",
+      },
+    }
+  );
   const [items, setItems] = React.useState<GalleryImages.Item[]>([]);
 
   React.useEffect(() => {

@@ -23,6 +23,7 @@ export const getTheme = (): FacadeGood.CustomTheme => {
     footerText: "#B9B9B9",
     buttonText: "#1C1F23",
     warning: "#FFC107",
+    danger: "DarkRed",
     error: "#FF5252",
     info: "#2196F3",
     white: "#FFFFFF",
@@ -35,7 +36,10 @@ export const getTheme = (): FacadeGood.CustomTheme => {
     bg0: "#161B20",
     bg1: "#394C60",
     bg2: "#919191",
+    bg3: "#dddddd",
     border: "#DEDEDE",
+    listSelected: "#DEDEDE",
+    listHighlighted: "#DEDEDE",
   };
 
   const loneHeight = {

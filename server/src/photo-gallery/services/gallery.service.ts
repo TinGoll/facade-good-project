@@ -23,6 +23,7 @@ import { ConfigService } from '@nestjs/config';
 
 import * as sharp from 'sharp';
 import * as path from 'path';
+import { UpdateGalleryItemInput } from '../inputs/update.item.input';
 
 @Injectable()
 export class GalleryService {
@@ -44,6 +45,13 @@ export class GalleryService {
   create(input: CreateGalleryItemInput): Observable<GalleryItem> {
     const entity = this.itemRepository.create(input);
     return from(this.itemRepository.save(entity));
+  }
+
+  /** Обновление item */
+  update({ id, ...input }: UpdateGalleryItemInput): Observable<GalleryItem> {
+    return from(this.itemRepository.update({ id }, { ...input })).pipe(
+      mergeMap(() => this.itemRepository.findOne({ where: { id } })),
+    );
   }
 
   addImage(
