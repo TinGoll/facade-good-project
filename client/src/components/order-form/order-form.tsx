@@ -164,18 +164,39 @@ function SubmitButton() {
 
   const handleSubmit = () => {
     setLoading(true);
+    state.header.material;
+    const header = {
+      material: state.header?.material?.value || "--",
+      model: state.header?.model?.value || "--",
+      color: state.header?.color?.value || "--",
+      patina: state.header?.patina?.value || "--",
+      glossiness: state.header.glossiness || "--",
+      drill: state.header.drill || "--",
+      thermalseam: state.header.thermalseam || "--",
+      roll: state.header.roll || "--",
+      note: state.header.note || "",
+
+      date: state.header.date || "--",
+      mail: state.header.mail || "--",
+      phone: state.header.phone || "--",
+    };
+    const data = {
+      header,
+      facades: state.facades,
+      accessories: state.accessories,
+      files: state.files,
+    };
+
     const formData = new FormData();
 
-    formData.append("header", JSON.stringify(state.header));
-    formData.append("accessories", JSON.stringify(state.accessories));
-    formData.append("facades", JSON.stringify(state.facades));
+    formData.append("header", JSON.stringify(data.header));
+    formData.append("accessories", JSON.stringify(data.accessories));
+    formData.append("facades", JSON.stringify(data.facades));
 
-    state.files.forEach((file) => {
+    data.files.forEach((file) => {
       formData.append("files", file, file.name);
     });
-
-    dispatch({type: "RESET"})
-
+    dispatch({ type: "RESET" });
     setLoading(false);
   };
 
