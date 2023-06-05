@@ -73,13 +73,12 @@ export class OrderInterceptor implements NestInterceptor {
     const from = process.env.SMTP_USER;
     const to = process.env.EMAIL_COMPANY;
 
-    console.log("host >>",host);
-    console.log("port >>",port);
-    console.log("user >>",user);
-    console.log("pass >>",pass);
-    console.log("from >>",from);
-    console.log("to >>",to);
-    
+    console.log('host >>', host);
+    console.log('port >>', port);
+    console.log('user >>', user);
+    console.log('pass >>', pass);
+    console.log('from >>', from);
+    console.log('to >>', to);
 
     const options = {
       service: 'gmail',
@@ -89,8 +88,8 @@ export class OrderInterceptor implements NestInterceptor {
       debug: true,
       secureConnection: false,
       auth: {
-        user: 'facade.good.ru@gmail.com',
-        pass: 'pwcjlkkipcgrjijs',
+        user: user,
+        pass: pass,
       },
       tls: {
         rejectUnAuthorized: true,
@@ -99,12 +98,9 @@ export class OrderInterceptor implements NestInterceptor {
 
     const transporter = nodemailer.createTransport(options);
 
-    console.log('host', (transporter.options as any).host);
-    console.log('options', transporter.options as any);
-
     const mailOptions = {
-      from: `From <${`facade.good.ru@gmail.com`}>`,
-      to: "roma.oliynyk83@gmail.com",
+      from: from,
+      to: to,
       subject: 'Заказ мебельных фасадов',
       html: html,
       attachments: files.map((file) => ({
