@@ -1,4 +1,11 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import * as nodemailer from 'nodemailer';
@@ -29,8 +36,11 @@ export class OrderInterceptor implements NestInterceptor {
     const html$ = this.convertToHTML(data).pipe(
       catchError((error) => {
         console.error('Ошибка при конвертации данных в HTML:', error);
-        throw new HttpException('Ошибка при конвертации данных в HTML', HttpStatus.INTERNAL_SERVER_ERROR);
-      })
+        throw new HttpException(
+          'Ошибка при конвертации данных в HTML',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }),
     );
 
     return html$.pipe(
@@ -41,8 +51,11 @@ export class OrderInterceptor implements NestInterceptor {
       switchMap(() => next.handle()),
       catchError((error) => {
         console.error('Ошибка при отправке письма:', error);
-        throw new HttpException('Ошибка при отправке письма', HttpStatus.INTERNAL_SERVER_ERROR);
-      })
+        throw new HttpException(
+          'Ошибка при отправке письма',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }),
     );
   }
 
@@ -60,15 +73,36 @@ export class OrderInterceptor implements NestInterceptor {
     const from = this.configService.get('SMTP_USER');
     const to = this.configService.get('EMAIL_COMPANY');
 
-    const transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure: true,
+    const options = {
+      service: 'gmail',
+      port: 465,
+      secure: true, // true for 465, false for other ports
+      logger: true,
+      debug: true,
+      secureConnection: false,
       auth: {
         user,
         pass,
       },
-    });
+      tls: {
+        rejectUnAuthorized: true,
+      },
+    } as any;
+
+    const transporter = nodemailer.createTransport(options);
+
+    /**
+     * {
+      service: 'gmail',
+      port: 465,
+      secure: true,
+      ignoreTLS: true,
+      auth: {
+        user,
+        pass,
+      },
+    }
+     */
 
     const mailOptions = {
       from,
