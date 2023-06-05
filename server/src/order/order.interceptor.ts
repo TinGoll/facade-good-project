@@ -66,38 +66,45 @@ export class OrderInterceptor implements NestInterceptor {
   }
 
   sendEmail(html: string, files: any[]): Observable<void> {
-    const host = this.configService.get('SMPT_HOST');
-    const port = this.configService.get('SMTP_PORT');
-    const user = this.configService.get('SMTP_USER');
-    const pass = this.configService.get('SMTP_PASSWORD');
-    const from = this.configService.get('SMTP_USER');
-    const to = this.configService.get('EMAIL_COMPANY');
+    const host = process.env.SMPT_HOST;
+    const port = process.env.SMTP_PORT;
+    const user = process.env.SMTP_USER;
+    const pass = process.env.SMTP_PASSWORD;
+    const from = process.env.SMTP_USER;
+    const to = process.env.EMAIL_COMPANY;
+
+    console.log("host >>",host);
+    console.log("port >>",port);
+    console.log("user >>",user);
+    console.log("pass >>",pass);
+    console.log("from >>",from);
+    console.log("to >>",to);
+    
 
     const options = {
       service: 'gmail',
-      port:465,
-      secure: true, // true for 465, false for other ports
+      port: 465,
+      secure: true,
       logger: true,
       debug: true,
       secureConnection: false,
-      host,
       auth: {
-        user,
-        pass,
+        user: 'facade.good.ru@gmail.com',
+        pass: 'pwcjlkkipcgrjijs',
       },
-      tls:{
-        rejectUnAuthorized:true
-    }
+      tls: {
+        rejectUnAuthorized: true,
+      },
     } as any;
 
     const transporter = nodemailer.createTransport(options);
 
-    console.log("host", (transporter.options as any).host);
-    console.log("options", (transporter.options as any));
+    console.log('host', (transporter.options as any).host);
+    console.log('options', transporter.options as any);
 
     const mailOptions = {
-      from: `From <${from}>`,
-      to,
+      from: `From <${`facade.good.ru@gmail.com`}>`,
+      to: "roma.oliynyk83@gmail.com",
       subject: 'Заказ мебельных фасадов',
       html: html,
       attachments: files.map((file) => ({
