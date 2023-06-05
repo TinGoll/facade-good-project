@@ -75,37 +75,27 @@ export class OrderInterceptor implements NestInterceptor {
 
     const options = {
       service: 'gmail',
-      port: 465,
+      port:465,
       secure: true, // true for 465, false for other ports
       logger: true,
       debug: true,
       secureConnection: false,
+      host,
       auth: {
         user,
         pass,
       },
-      tls: {
-        rejectUnAuthorized: true,
-      },
+      tls:{
+        rejectUnAuthorized:true
+    }
     } as any;
 
     const transporter = nodemailer.createTransport(options);
 
-    /**
-     * {
-      service: 'gmail',
-      port: 465,
-      secure: true,
-      ignoreTLS: true,
-      auth: {
-        user,
-        pass,
-      },
-    }
-     */
+    console.log((transporter.options as any).host);
 
     const mailOptions = {
-      from,
+      from: `From <${from}>`,
       to,
       subject: 'Заголовок письма',
       html: html,
