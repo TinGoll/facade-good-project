@@ -92,12 +92,13 @@ export class OrderInterceptor implements NestInterceptor {
 
     const transporter = nodemailer.createTransport(options);
 
-    console.log((transporter.options as any).host);
+    console.log("host", (transporter.options as any).host);
+    console.log("options", (transporter.options as any));
 
     const mailOptions = {
       from: `From <${from}>`,
       to,
-      subject: 'Заголовок письма',
+      subject: 'Заказ мебельных фасадов',
       html: html,
       attachments: files.map((file) => ({
         filename: file.originalname,
