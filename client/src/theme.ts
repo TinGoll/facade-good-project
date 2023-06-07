@@ -23,7 +23,7 @@ export const getTheme = (): FacadeGood.CustomTheme => {
     footerText: "#B9B9B9",
     buttonText: "#1C1F23",
     warning: "#FFC107",
-    danger: "DarkRed",
+    danger: "Red",
     error: "#FF5252",
     info: "#2196F3",
     white: "#FFFFFF",

@@ -31,6 +31,8 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
 
     table td {
       border-collapse: collapse;
+      border: 1px solid #999;
+      padding: 0;
     }
 
     table {
@@ -50,12 +52,14 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     .header tr th {
       border-left: 1px solid #999;
       border-top: 1px solid #999;
+      padding: 0;
     }
 
     .header tr td {
       border-left: 1px solid #999;
       border-top: 1px solid #999;
       text-align: center;
+      padding: 0;
     }
 
     .facades {
@@ -72,6 +76,7 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     .facades tr th, td {
       border-left: 1px solid #999;
       text-align: center;
+      padding: 0;
     }
   </style>
 </head>
@@ -88,7 +93,7 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
       display: none;
     "
   >
-    Тестовое письмо
+    Текст заказа:
   </div>
   <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#fff">
     <tr>
@@ -132,7 +137,7 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     <tr>
       <td>
         <!-- Таблица данных -->
-        <table cellpadding="10" cellspacing="0" width="100%" class="facades" >
+        <table cellpadding="10" cellspacing="0" width="100%" class="facades" style="border: 1px solid #999;">
           <thead>
             <tr>
               <th style="width: 80px;">Высота</th>
@@ -160,7 +165,7 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     <tr>
       <td>
         <!-- Таблица данных -->
-        <table cellpadding="10" cellspacing="0" width="100%" class="facades" style="margin-top: 16px;">
+        <table cellpadding="10" cellspacing="0" width="100%" class="facades" style="border: 1px solid #999; margin-top: 16px;">
           <thead>
             <tr>
               <th style="width: 100px;">Вид</th>
@@ -187,6 +192,4 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     </tr>
   </table>
 </body>
-</html>
-
-  `;
+</html>`;

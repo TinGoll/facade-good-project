@@ -25,6 +25,10 @@ export class OrderInterceptor implements NestInterceptor {
     const header = JSON.parse(formData.header || '{}');
     const facades = JSON.parse(formData.facades || '[]');
     const accessories = JSON.parse(formData.accessories || '[]');
+    const text =
+      formData.text ||
+      `Заказ мебельных фасадов от ${new Date().toLocaleString()}`;
+    const orderNumber = Number(formData.number) || Date.now();
 
     const data: Order.Data = {
       header,
@@ -44,7 +48,7 @@ export class OrderInterceptor implements NestInterceptor {
     );
 
     return html$.pipe(
-      switchMap((html) => this.sendEmail(html, files)),
+      switchMap((html) => this.sendEmail(orderNumber, text, html, files)),
       tap(() => {
         console.log('Письмо успешно отправлено');
       }),
@@ -65,7 +69,12 @@ export class OrderInterceptor implements NestInterceptor {
     return of(html);
   }
 
-  sendEmail(html: string, files: any[]): Observable<void> {
+  sendEmail(
+    orderNumber: number,
+    text: string,
+    html: string,
+    files: any[],
+  ): Observable<void> {
     const host = process.env.SMPT_HOST;
     const port = process.env.SMTP_PORT;
     const user = process.env.SMTP_USER;
@@ -73,16 +82,9 @@ export class OrderInterceptor implements NestInterceptor {
     const from = process.env.SMTP_USER;
     const to = process.env.EMAIL_COMPANY;
 
-    console.log('host >>', host);
-    console.log('port >>', port);
-    console.log('user >>', user);
-    console.log('pass >>', pass);
-    console.log('from >>', from);
-    console.log('to >>', to);
-
     const options = {
       service: 'gmail',
-      port: 465,
+      port: Number(port),
       secure: true,
       logger: true,
       debug: true,
@@ -101,8 +103,9 @@ export class OrderInterceptor implements NestInterceptor {
     const mailOptions = {
       from: from,
       to: to,
-      subject: 'Заказ мебельных фасадов',
+      subject: `Заказ № ${orderNumber}`,
       html: html,
+      text: text,
       attachments: files.map((file) => ({
         filename: file.originalname,
         content: file.buffer,
