@@ -5,20 +5,26 @@ import { FileWithPath } from "react-dropzone";
 
 declare module Order {
   interface FacadeType {
-    value: string;
+    id: number;
+    name: string;
   }
 
   interface Material {
-    type: "Массив" | "МДФ";
-    value: string;
-  }
-
-  interface AccessorieType {
+    id: number;
+    name: string;
     type: string;
   }
 
+  interface Model {
+    id: number;
+    name: string;
+    materials: string[];
+  }
+
   interface AccessorieModel {
-    typeOf: string[];
+    id: number;
+    group: string;
+    name: string;
   }
 
   interface Other {
@@ -46,7 +52,7 @@ declare module Order {
 
     date?: string;
     mail?: string;
-    phone?:string;
+    phone?: string;
   }
 
   interface Facade {
@@ -60,8 +66,8 @@ declare module Order {
 
   interface Accessorie {
     id: number | string;
-    type?: SelectOption<AccessorieType>;
-    model?: SelectOption<AccessorieModel>;
+    type?: SelectOption;
+    model?: SelectOption;
     height?: number;
     amount?: number;
     note?: string;

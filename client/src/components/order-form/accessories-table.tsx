@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   Table,
   THead,
@@ -13,23 +13,28 @@ import useOrderForm from "./use-order-form";
 import { Box, Typography } from "../facade-good/facade-good";
 
 interface Props {
-  accessorieType: SelectOption<Order.AccessorieType>[];
   accessorieModel: SelectOption<Order.AccessorieModel>[];
 }
 
-const AccessoriesTable: FC<Props> = ({
-  accessorieModel = [],
-  accessorieType = [],
-}) => {
+const AccessoriesTable: FC<Props> = ({ accessorieModel = [] }) => {
   const { state, dispatch } = useOrderForm();
-
+  const [accessorieTypes, setAccessorieTypes] = useState<SelectOption[]>([]);
 
   const deleteHandler = (payload: number) =>
     dispatch({ type: "REMOVE_ACCESSORIE", payload });
 
   const handleChange = (payload: Order.Accessorie) => {
-    dispatch({ type: "UPDATE_ACCESSORIE", payload })
+    dispatch({ type: "UPDATE_ACCESSORIE", payload });
   };
+
+  useEffect(() => {
+    setAccessorieTypes(
+      [...new Set(accessorieModel.map((v) => v.group))].map((v) => ({
+        value: v,
+        label: v,
+      }))
+    );
+  }, [accessorieModel]);
 
   if (!state.accessories.length) {
     return (
@@ -43,10 +48,10 @@ const AccessoriesTable: FC<Props> = ({
     <Table>
       <THead>
         <Row>
-          <Th css={{ minWidth: 90 }}>Вид</Th>
-          <Th css={{ minWidth: 90 }}>Модель</Th>
-          <Th css={{ maxWidth: 90, width: "10%" }}>Выс./Длин.</Th>
-          <Th css={{ maxWidth: 90, width: "10%" }}>Кол-во</Th>
+          <Th css={{ width: 180 }}>Вид</Th>
+          <Th css={{ width: 220 }}>Модель</Th>
+          <Th css={{ width: 120 }}>Выс./Длин.</Th>
+          <Th css={{ width: 90 }}>Кол-во</Th>
           <Th css={{ width: "auto" }}>Комментарий</Th>
           <Th css={{ width: 40 }}></Th>
         </Row>
@@ -59,7 +64,7 @@ const AccessoriesTable: FC<Props> = ({
             onDelete={() => deleteHandler(index)}
             key={item.id}
             accessorieModel={accessorieModel}
-            accessorieType={accessorieType}
+            accessorieType={accessorieTypes}
           />
         ))}
       </TBody>

@@ -43,6 +43,8 @@ declare module OrderFormTypes {
   }
 }
 
+export { OrderFormTypes };
+
 export const mockData: OrderFormTypes.Data = {
   materials: [
     { id: 1, name: "Дуб", type: "Массив" },
@@ -80,9 +82,9 @@ export const mockData: OrderFormTypes.Data = {
   ],
   colors: [
     { id: 1, name: "Капучино" },
-    { id: 1, name: "Ваниль" },
-    { id: 1, name: "Орех" },
-    { id: 1, name: "Миндаль" },
+    { id: 2, name: "Ваниль" },
+    { id: 3, name: "Орех" },
+    { id: 4, name: "Миндаль" },
   ],
   glossiness: [
     { id: 1, name: "Глубоко матовый (10%)" },
@@ -104,11 +106,11 @@ export const mockData: OrderFormTypes.Data = {
   ],
   accessories: [
     { id: 1, group: "Колонна", name: "Колонна №1" },
-    { id: 1, group: "Колонна", name: "Колонна №2" },
-    { id: 1, group: "Карниз", name: "Карниз №1" },
-    { id: 1, group: "Карниз", name: "Карниз №2" },
-    { id: 1, group: "Карниз", name: "Карниз №3" },
-    { id: 1, group: "Цоколь", name: "Цоколь №1" },
-    { id: 1, group: "Цоколь", name: "Цоколь №2" },
+    { id: 2, group: "Колонна", name: "Колонна №2" },
+    { id: 3, group: "Карниз", name: "Карниз №1" },
+    { id: 4, group: "Карниз", name: "Карниз №2" },
+    { id: 5, group: "Карниз", name: "Карниз №3" },
+    { id: 6, group: "Цоколь", name: "Цоколь №1" },
+    { id: 7, group: "Цоколь", name: "Цоколь №2" },
   ],
 };

@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import { HttpExceptionFilter } from './http-exception-filter/http-exception.filter';
 
+const whitelist = [];
+
 async function bootstrap() {
   const httpsOptions = getHttpsOptions();
 
@@ -16,12 +18,11 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      if (origin) {
+      if (!origin || whitelist.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
         console.log('blocked cors for:', origin);
-        callback(null, true);
-        // callback(new Error('Blocked by CORS'));
+        callback(null, false);
       }
     },
     allowedHeaders: [

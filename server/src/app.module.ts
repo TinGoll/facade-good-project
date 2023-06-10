@@ -8,11 +8,17 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { OrderModule } from './order/order.module';
-
-
+import { AuthModule } from './auth/auth.module';
+import { HdbkModule } from './hdbk/hdbk.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    CacheModule.register({
+      isGlobal: true,
+      max: 20,
+      ttl: 3600000,
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `../.env`,
@@ -44,12 +50,14 @@ import { OrderModule } from './order/order.module';
         migrationsTableName: 'migrations',
         synchronize: true,
         autoLoadEntities: true,
-        logging: ['error', 'migration',],
+        logging: ['error', 'migration'],
       }),
     }),
     PhotoGalleryModule,
     FileSystemModule,
     OrderModule,
+    AuthModule,
+    HdbkModule,
   ],
   controllers: [],
   providers: [],

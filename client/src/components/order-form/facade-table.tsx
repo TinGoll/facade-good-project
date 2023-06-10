@@ -38,12 +38,12 @@ const FacadeTable: FC<Props> = ({ facadeType }) => {
     <Table>
       <THead>
         <Row>
-          <Th css={{ maxWidth: 90, width: "10%" }}>Выс.</Th>
+          <Th css={{ width: 80 }}>Выс.</Th>
           <Th css={{ width: 20 }}></Th>
-          <Th css={{ maxWidth: 90, width: "10%" }}>Шир.</Th>
+          <Th css={{ width: 80 }}>Шир.</Th>
           <Th css={{ width: 20 }}></Th>
-          <Th css={{ maxWidth: 90, width: "10%" }}>Кол-во</Th>
-          <Th css={{ minWidth: 100 }}>Вид</Th>
+          <Th css={{ width: 80 }}>Кол-во</Th>
+          <Th css={{ width: "180px" }}>Вид</Th>
           <Th css={{ width: "auto" }}>Комментарий</Th>
           <Th css={{ width: 40 }}></Th>
         </Row>

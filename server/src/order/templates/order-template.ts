@@ -31,8 +31,6 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
 
     table td {
       border-collapse: collapse;
-      border: 1px solid #999;
-      padding: 0;
     }
 
     table {
@@ -52,31 +50,44 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     .header tr th {
       border-left: 1px solid #999;
       border-top: 1px solid #999;
-      padding: 0;
     }
 
     .header tr td {
       border-left: 1px solid #999;
       border-top: 1px solid #999;
       text-align: center;
-      padding: 0;
     }
 
     .facades {
       border: 1px solid #999;
     }
+
     .facades thead {
       background: #e0e0e0;
     }
 
     .facades tr {
-      border-bottom: 1px solid #999;;
+      border-bottom: 1px solid #999;
     }
 
-    .facades tr th, td {
+    .facades tr th,
+    .facades tr td {
       border-left: 1px solid #999;
       text-align: center;
-      padding: 0;
+    }
+
+    /* Стили для печати */
+    @media print {
+      table td {
+        padding: 0 !important;
+      }
+      
+      .header tr th,
+      .header tr td,
+      .facades tr th,
+      .facades tr td {
+        border: 1px solid #999 !important;
+      }
     }
   </style>
 </head>
@@ -93,7 +104,7 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
       display: none;
     "
   >
-    Текст заказа:
+    Тестовое письмо
   </div>
   <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#fff">
     <tr>
@@ -137,7 +148,7 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     <tr>
       <td>
         <!-- Таблица данных -->
-        <table cellpadding="10" cellspacing="0" width="100%" class="facades" style="border: 1px solid #999;">
+        <table cellpadding="10" cellspacing="0" width="100%" class="facades">
           <thead>
             <tr>
               <th style="width: 80px;">Высота</th>
@@ -165,7 +176,7 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     <tr>
       <td>
         <!-- Таблица данных -->
-        <table cellpadding="10" cellspacing="0" width="100%" class="facades" style="border: 1px solid #999; margin-top: 16px;">
+        <table cellpadding="10" cellspacing="0" width="100%" class="facades" style="margin-top: 16px;">
           <thead>
             <tr>
               <th style="width: 100px;">Вид</th>
@@ -192,4 +203,6 @@ export const ORDER_TEMPLATE = `<!DOCTYPE html>
     </tr>
   </table>
 </body>
-</html>`;
+</html>
+`;
+

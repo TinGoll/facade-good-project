@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Select, { SelectOption } from "../facade-good/form-components/select";
 import { Row, Td } from "../facade-good/form-components/table";
 import Textbox from "../facade-good/form-components/textbox";
@@ -24,7 +24,7 @@ const Button = styled("button")<EmotionProps<HTMLButtonElement>>`
 `;
 
 interface Props {
-  accessorieType?: SelectOption<Order.AccessorieType>[];
+  accessorieType?: SelectOption[];
   accessorieModel?: SelectOption<Order.AccessorieModel>[];
   item: Order.Accessorie;
   onDelete: () => void;
@@ -43,6 +43,10 @@ const OrderDesktopTableAccessoriesRow: FC<Props> = ({
   const [value, setValue] = useState<Order.Accessorie>(item);
   const [typing, setTyping] = useState(false);
 
+  const [filteredAccessorie, setFilteredAccessorie] = useState<SelectOption[]>(
+    []
+  );
+
   const handleChange = (data: Partial<Order.Accessorie>) => {
     setTyping(true);
     setValue((prev) => ({ ...prev, ...data }));
@@ -51,6 +55,22 @@ const OrderDesktopTableAccessoriesRow: FC<Props> = ({
   const handleClick = () => {
     // setIsFocused((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (accessorieModel.length && accessorieType.length && value.type) {
+      setFilteredAccessorie(
+        accessorieModel.filter((v) => v.group === value.type?.value)
+      );
+    } else {
+      setFilteredAccessorie([]);
+    }
+  }, [accessorieModel, accessorieType, value]);
+
+  useEffect(() => {
+    if (!value.type?.value && value.model?.value) {
+      setValue((prev) => ({ ...prev, model: undefined }));
+    }
+  }, [value]);
 
   useDebounce(
     () => {
@@ -65,16 +85,13 @@ const OrderDesktopTableAccessoriesRow: FC<Props> = ({
     [value, onChange]
   );
 
-
   return (
     <Row className={isFocused ? "focused" : ""} onClick={handleClick}>
       <Td>
         <Select
           py={0.3}
           options={accessorieType}
-          onChange={(v: SelectOption<Order.AccessorieType>) =>
-            handleChange({ type: v })
-          }
+          onChange={(v: SelectOption) => handleChange({ type: v })}
           value={value?.type}
         />
       </Td>
@@ -82,7 +99,7 @@ const OrderDesktopTableAccessoriesRow: FC<Props> = ({
       <Td>
         <Select
           py={0.4}
-          options={accessorieModel}
+          options={filteredAccessorie}
           onChange={(v: SelectOption<Order.AccessorieModel>) =>
             handleChange({ model: v })
           }
@@ -91,13 +108,25 @@ const OrderDesktopTableAccessoriesRow: FC<Props> = ({
       </Td>
 
       <Td>
-        <Textbox type="number" onChange={(v) => handleChange({ height: Number(v) })} value={value?.height} />
+        <Textbox
+          type="number"
+          onChange={(v) => handleChange({ height: Number(v) })}
+          value={value?.height}
+        />
       </Td>
       <Td>
-        <Textbox type="number" onChange={(v) => handleChange({ amount: Number(v) })} value={value?.amount} />
+        <Textbox
+          type="number"
+          onChange={(v) => handleChange({ amount: Number(v) })}
+          value={value?.amount}
+        />
       </Td>
       <Td>
-        <Textbox type="text" onChange={(v) => handleChange({ note: String(v) })} value={value?.note}  />
+        <Textbox
+          type="text"
+          onChange={(v) => handleChange({ note: String(v) })}
+          value={value?.note}
+        />
       </Td>
       <Td>
         <Button onClick={() => onDelete()}>&times;</Button>

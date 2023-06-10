@@ -13,6 +13,8 @@ import { FileWithPath } from "react-dropzone";
 import SubmitButton from "./submit-button";
 import OrderFornContact from "./order-forn-contact";
 import { mockData } from "./mock-data";
+import { SelectOption } from "../facade-good/form-components/select";
+import { Order } from "./order-form-provider";
 
 const accessorieType = [
   { label: "Карниз", value: "Карниз", type: "Карниз" },
@@ -22,12 +24,6 @@ const accessorieType = [
 const accessorieModel = [
   { label: "Карниз", value: "Карниз", typeOf: ["Карниз"] },
   { label: "Колонна №1", value: "Колонна №1", typeOf: ["Колонна"] },
-];
-
-const facadeType = [
-  { label: "Глухой", value: "Глухой" },
-  { label: "Витрина", value: "Витрина" },
-  { label: "Решётка", value: "Решётка" },
 ];
 
 function Note() {
@@ -108,16 +104,71 @@ function AttachmentCount() {
 
 const OrderForm = () => {
   const [clearContact, setClearContact] = useState(false);
+  const [massiv, setMassiv] = useState<SelectOption<Order.Material>[]>([]);
+  const [model, setModel] = useState<SelectOption<Order.Model>[]>([]);
+  const [colors, setColors] = useState<SelectOption[]>([]);
+  const [patinas, setPatinas] = useState<SelectOption[]>([]);
+  const [glossiness, setGlossiness] = useState<SelectOption[]>([]);
+
+  const [facadeTypes, setFacadeTypes] = useState<
+    SelectOption<Order.FacadeType>[]
+  >([]);
+  const [accessories, setAccessories] = useState<
+    SelectOption<Order.AccessorieModel>[]
+  >([]);
+
   const clearAllFields = () => {
     setClearContact(true);
   };
 
-  
+  useEffect(() => {
+    setMassiv(
+      mockData.materials.map((v) => ({
+        value: v.name,
+        label: v.name,
+        ...v,
+      }))
+    );
+
+    setModel(
+      mockData.models.map((v) => ({
+        value: v.name,
+        label: v.name,
+        ...v,
+      }))
+    );
+
+    setColors(
+      mockData.colors.map((v) => ({ value: v.name, label: v.name, ...v }))
+    );
+
+    setPatinas(
+      mockData.patinas.map((v) => ({ value: v.name, label: v.name, ...v }))
+    );
+    setGlossiness(
+      mockData.glossiness.map((v) => ({ value: v.name, label: v.name, ...v }))
+    );
+
+    setFacadeTypes(
+      mockData.facades.map((v) => ({ value: v.name, label: v.name, ...v }))
+    );
+
+    setAccessories(
+      mockData.accessories.map((v) => ({ value: v.name, label: v.name, ...v }))
+    );
+  }, []);
 
   return (
     <Box css={{ marginTop: 40 }}>
       <OrderBlockWrapper css={{ marginBottom: 16 }} footer={<Note />}>
-        <OrderFormHeader css={{ padding: 16 }} />
+        <OrderFormHeader
+          css={{ padding: 16 }}
+          massiv={massiv}
+          models={model}
+          colors={colors}
+          patinas={patinas}
+          glossiness={glossiness}
+        />
       </OrderBlockWrapper>
       <OrderBlockWrapper
         header={
@@ -131,7 +182,7 @@ const OrderForm = () => {
           </Typography>
         }
       >
-        <FacadeTable facadeType={facadeType} />
+        <FacadeTable facadeType={facadeTypes} />
       </OrderBlockWrapper>
 
       <OrderBlockWrapper
@@ -148,8 +199,7 @@ const OrderForm = () => {
         }
       >
         <AccessoriesTable
-          accessorieModel={accessorieModel}
-          accessorieType={accessorieType}
+          accessorieModel={accessories}
         />
       </OrderBlockWrapper>
 
