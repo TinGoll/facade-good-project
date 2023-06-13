@@ -82,9 +82,16 @@ const FileBox = styled("div")<EmotionProps<HTMLDivElement>>`
 interface FileDropzoneProps {
   onDrop: (files: FileWithPath[]) => void;
   files: FileWithPath[];
+  placeholder?: string;
+  multiple?: boolean;
 }
 
-const FileDropzone: React.FC<FileDropzoneProps> = ({ onDrop, files }) => {
+const FileDropzone: React.FC<FileDropzoneProps> = ({
+  onDrop,
+  files,
+  placeholder,
+  multiple,
+}) => {
   const [droppedFiles, setDroppedFiles] = useState<FileWithPath[]>([]);
 
   const handleDrop = (acceptedFiles: FileWithPath[]) => {
@@ -99,7 +106,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onDrop, files }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleDrop,
-    multiple: true,
+    multiple: Boolean(multiple),
   });
 
   return (
@@ -109,7 +116,11 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onDrop, files }) => {
         className={`dropzone ${isDragActive ? "active" : ""}`}
       >
         <input {...getInputProps()} />
-        <p>Перетащите файлы сюда или нажмите для выбора файла.</p>
+        <p>
+          {placeholder
+            ? placeholder
+            : "Перетащите файлы сюда или нажмите для выбора файла."}{" "}
+        </p>
       </DropZone>
 
       <FileBox className="file-stickers">
@@ -126,7 +137,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onDrop, files }) => {
           css={{
             top: 8,
             right: 8,
-            zIndex: 100
+            zIndex: 100,
           }}
         >
           &times;

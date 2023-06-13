@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import { HttpExceptionFilter } from './http-exception-filter/http-exception.filter';
 
-const whitelist = ['https://facade-good.ru', 'http://localhost:8000'];
+const whitelist = ['https://facade-good.ru', 'http://localhost:8000', 'http://localhost:3000'];
 
 async function bootstrap() {
   const httpsOptions = getHttpsOptions();

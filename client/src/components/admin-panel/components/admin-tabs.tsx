@@ -9,6 +9,7 @@ import Patina from "./patina";
 import Glossiness from "./glossiness";
 import Accessories from "./accessories";
 import Facades from "./facades";
+import FacadeCards from "./facade-cards";
 
 function EmptyTab() {
   return (
@@ -122,6 +123,17 @@ const AdminTabs: FC<Props> = ({
     case 6:
       return (
         <Accessories
+          data={data}
+          setError={setError}
+          setRefresh={setRefresh}
+          setToken={setToken}
+          setLoading={setLoading}
+          token={token}
+        />
+      );
+    case 7:
+      return (
+        <FacadeCards
           data={data}
           setError={setError}
           setRefresh={setRefresh}

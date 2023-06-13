@@ -15,16 +15,8 @@ import OrderFornContact from "./order-forn-contact";
 import { mockData } from "./mock-data";
 import { SelectOption } from "../facade-good/form-components/select";
 import { Order } from "./order-form-provider";
-
-const accessorieType = [
-  { label: "Карниз", value: "Карниз", type: "Карниз" },
-  { label: "Колонна №1", value: "Колонна №1", type: "Колонна" },
-];
-
-const accessorieModel = [
-  { label: "Карниз", value: "Карниз", typeOf: ["Карниз"] },
-  { label: "Колонна №1", value: "Колонна №1", typeOf: ["Колонна"] },
-];
+import $api from "../../http";
+import { Hdbk } from "./hdbk-types";
 
 function Note() {
   const { dispatch } = useOrderForm();
@@ -51,6 +43,7 @@ function Attachment() {
 
   return (
     <FileDropzone
+      multiple
       files={state.files}
       onDrop={function (files: FileWithPath[]): void {
         dispatch({ type: "SET_FILES", payload: files });
@@ -109,6 +102,9 @@ const OrderForm = () => {
   const [colors, setColors] = useState<SelectOption[]>([]);
   const [patinas, setPatinas] = useState<SelectOption[]>([]);
   const [glossiness, setGlossiness] = useState<SelectOption[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<Hdbk.Data | null>(null);
+  const [error, setError] = useState("");
 
   const [facadeTypes, setFacadeTypes] = useState<
     SelectOption<Order.FacadeType>[]
@@ -122,41 +118,62 @@ const OrderForm = () => {
   };
 
   useEffect(() => {
-    setMassiv(
-      mockData.materials.map((v) => ({
-        value: v.name,
-        label: v.name,
-        ...v,
-      }))
-    );
-
-    setModel(
-      mockData.models.map((v) => ({
-        value: v.name,
-        label: v.name,
-        ...v,
-      }))
-    );
-
-    setColors(
-      mockData.colors.map((v) => ({ value: v.name, label: v.name, ...v }))
-    );
-
-    setPatinas(
-      mockData.patinas.map((v) => ({ value: v.name, label: v.name, ...v }))
-    );
-    setGlossiness(
-      mockData.glossiness.map((v) => ({ value: v.name, label: v.name, ...v }))
-    );
-
-    setFacadeTypes(
-      mockData.facades.map((v) => ({ value: v.name, label: v.name, ...v }))
-    );
-
-    setAccessories(
-      mockData.accessories.map((v) => ({ value: v.name, label: v.name, ...v }))
-    );
+    setLoading(true);
+    $api
+      .get<Hdbk.Data>("hdbk/get-all")
+      .then((responce) => {
+        setData(responce.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error?.response?.data?.message || "Неизвестная ошибка");
+        setLoading(false);
+        setData(null);
+      });
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setMassiv(
+        data.materials.map((v) => ({
+          value: v.name,
+          label: v.name,
+          ...v,
+        }))
+      );
+
+      setModel(
+        data.models.map((v) => ({
+          value: v.name,
+          label: v.name,
+          ...v,
+        }))
+      );
+
+      setColors(
+        data.colors.map((v) => ({ value: v.name, label: v.name, ...v }))
+      );
+
+      setPatinas(
+        data.patinas.map((v) => ({ value: v.name, label: v.name, ...v }))
+      );
+      setGlossiness(
+        data.glossiness.map((v) => ({ value: v.name, label: v.name, ...v }))
+      );
+
+      setFacadeTypes(
+        data.facades.map((v) => ({ value: v.name, label: v.name, ...v }))
+      );
+
+      setAccessories(
+        data.accessories.map((v) => ({
+          value: v.name,
+          label: v.name,
+          ...v,
+        }))
+      );
+    }
+  }, [data]);
 
   return (
     <Box css={{ marginTop: 40 }}>
@@ -198,9 +215,7 @@ const OrderForm = () => {
           </Typography>
         }
       >
-        <AccessoriesTable
-          accessorieModel={accessories}
-        />
+        <AccessoriesTable accessorieModel={accessories} />
       </OrderBlockWrapper>
 
       <OrderBlockWrapper

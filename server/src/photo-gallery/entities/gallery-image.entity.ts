@@ -43,7 +43,10 @@ export class GalleryImage {
   index: number;
 
   @ManyToOne(() => GalleryItem, (item) => item.images, {
+    cascade: true,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
+  
   item: GalleryItem;
 }
