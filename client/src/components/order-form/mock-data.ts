@@ -1,51 +1,6 @@
-declare module OrderFormTypes {
-  interface Data {
-    materials: Material[];
-    models: Model[];
-    colors: Color[];
-    glossiness: Glossiness[];
-    patinas: Patina[];
-    facades: Facade[];
-    accessories: Accessorie[];
-  }
-  interface Material {
-    id: number;
-    name: string;
-    type: string;
-  }
+import { Hdbk } from "./hdbk-types";
 
-  interface Model {
-    id: number;
-    name: string;
-    materials: string[];
-  }
-
-  interface Color {
-    id: number;
-    name: string;
-  }
-  interface Glossiness {
-    id: number;
-    name: string;
-  }
-  interface Patina {
-    id: number;
-    name: string;
-  }
-  interface Facade {
-    id: number;
-    name: string;
-  }
-  interface Accessorie {
-    id: number;
-    group: string;
-    name: string;
-  }
-}
-
-export { OrderFormTypes };
-
-export const mockData: OrderFormTypes.Data = {
+export const mockData: Hdbk.Data = {
   materials: [
     { id: 1, name: "Дуб", type: "Массив" },
     { id: 2, name: "Ольха", type: "Массив" },

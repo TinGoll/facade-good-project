@@ -6,7 +6,7 @@ import { EmotionProps } from "../facade-good";
 
 export type SelectOption<T extends any = any, J extends string = string> = {
   [key in J]?: key extends "label" ? number | string : any;
-} & { label: string | number; value:any; } & T;
+} & { label: string | number; value: any } & T;
 
 type FacadeGoodProps = {
   css?: Interpolation<any>;
@@ -14,7 +14,7 @@ type FacadeGoodProps = {
   outline?: boolean;
 };
 
-const Container = styled("div")<FacadeGoodProps & { py?: number}>`
+const Container = styled("div")<FacadeGoodProps & { py?: number }>`
   position: relative;
   width: 100%;
   min-height: 1.5em;
@@ -24,8 +24,9 @@ const Container = styled("div")<FacadeGoodProps & { py?: number}>`
   align-items: center;
   gap: 0.5em;
   padding: 0.7em;
-  padding-top: ${({ py }) =>  typeof py === "undefined" ? "0.7em" : `${py}em` };
-  padding-bottom: ${({ py }) =>  typeof py === "undefined" ? "0.7em" : `${py}em` };
+  padding-top: ${({ py }) => (typeof py === "undefined" ? "0.7em" : `${py}em`)};
+  padding-bottom: ${({ py }) =>
+    typeof py === "undefined" ? "0.7em" : `${py}em`};
   border-radius: 0.25em;
   outline: none;
   box-sizing: border-box;
@@ -37,7 +38,8 @@ const Container = styled("div")<FacadeGoodProps & { py?: number}>`
     border: 0.05em solid
       ${({ theme, outline }) => (outline ? theme.colors.white : "none")};
     outline: 2px solid
-      ${({ theme, outline }) => (outline ? theme.colors.button.normal : theme.colors.button.normal)};
+      ${({ theme, outline }) =>
+        outline ? theme.colors.button.normal : theme.colors.button.normal};
   }
 `;
 
@@ -105,8 +107,6 @@ const ListItem = styled("li")<EmotionProps<HTMLLIElement>>`
     color: white;
   }
 `;
-
-
 
 interface SelectProps extends FacadeGoodProps {
   value?: SelectOption;
@@ -204,16 +204,15 @@ const Select: FC<SelectProps> = ({
       py={py}
       css={[{}, ...(Array.isArray(props.css) ? props.css : [props.css])]}
     >
-      <Span className={
-        `${!value && placeholder ? "placeholder" : ""}`}>
+      <Span className={`${!value && placeholder ? "placeholder" : ""}`}>
         {value
           ? `${placeholder ? placeholder + ": " : ""}${value.label}`
           : placeholder
           ? placeholder
-          : ""
-        }
+          : ""}
       </Span>
       <Button
+        type="button"
         hidden={!value}
         onClick={(e) => {
           e.stopPropagation();
@@ -237,7 +236,7 @@ const Select: FC<SelectProps> = ({
           borderTopColor: "#777",
         }}
       ></Box>
-      
+
       <AnimatePresence>
         {isOpen && (
           <List
@@ -270,5 +269,3 @@ const Select: FC<SelectProps> = ({
 };
 
 export default Select;
-
-

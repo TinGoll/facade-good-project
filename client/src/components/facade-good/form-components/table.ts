@@ -6,9 +6,9 @@ const Table = styled("table")<EmotionProps<HTMLTableElement>>`
   border-collapse: collapse;
 `;
 const THead = styled("thead")<EmotionProps<HTMLTableElement>>`
-   & tr {
+  & tr {
     background-color: rgba(57, 76, 96, 0.05);
-   }
+  }
 `;
 const TBody = styled("tbody")<EmotionProps<HTMLTableElement>>`
   & tr {
@@ -42,4 +42,20 @@ const Row = styled("tr")<EmotionProps<HTMLTableElement>>`
 const Th = styled("th")<EmotionProps<HTMLTableElement>>``;
 const Td = styled("td")<EmotionProps<HTMLTableElement>>``;
 
-export { Table, THead, TBody, Row, Th, Td };
+const TableButton = styled("button")<EmotionProps<HTMLButtonElement>>`
+  background: none;
+  border: none;
+  outline: none;
+  color: #777;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.25em;
+  width: 100%;
+  height: 100%;
+  &:focus,
+  :hover {
+    color: #333;
+  }
+`;
+
+export { Table, THead, TBody, Row, Th, Td, TableButton };

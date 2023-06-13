@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Observable, from, map, of, switchMap } from 'rxjs';
@@ -35,8 +35,15 @@ export class AuthService {
 
   login(input: UserLoginInput): Observable<{ token: string; user: User }> {
     const hashPassword = this.configService.get<string>('ADMIN_PASS');
+
     return this.comparePassword(input.password, hashPassword).pipe(
       switchMap((passwordMatches) => {
+        if (!passwordMatches) {
+          throw new HttpException(
+            `Не верный пароль`,
+            HttpStatus.UNAUTHORIZED,
+          );
+        }
         return this.generateJwt(user).pipe(map((token) => ({ token, user })));
       }),
     );

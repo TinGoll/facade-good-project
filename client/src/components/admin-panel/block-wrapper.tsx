@@ -1,6 +1,7 @@
-import styled from "@emotion/styled";
-import React, { FC, ReactNode } from "react";
+import React from "react";
+import { FC, ReactNode } from "react";
 import { EmotionProps } from "../facade-good/facade-good";
+import styled from "@emotion/styled";
 
 const Container = styled("div")<EmotionProps<HTMLDivElement>>`
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -24,7 +25,7 @@ interface Props extends EmotionProps<HTMLDivElement> {
   children?: ReactNode;
 }
 
-const OrderBlockWrapper: FC<Props> = ({
+const BlockWrapper: FC<Props> = ({
   header,
   footer,
   children,
@@ -40,4 +41,4 @@ const OrderBlockWrapper: FC<Props> = ({
   );
 };
 
-export default OrderBlockWrapper;
+export default BlockWrapper;

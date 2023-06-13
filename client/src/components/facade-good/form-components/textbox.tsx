@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import React, { FC } from "react";
 import { EmotionProps } from "../facade-good";
 
-const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolean, type?: "text" | "number" | "tel", fontsize?: number, p?: number, error?:boolean}>`
+const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolean, type?: "text" | "number" | "tel" | "password", fontsize?: number, p?: number, error?:boolean}>`
   position: relative;
   width: 100%;
   min-height: 1.7em;
@@ -21,6 +21,19 @@ const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolea
       ${({ theme, outline, error }) => (outline ? error ? theme.colors.danger : theme.colors.button.normal : theme.colors.button.normal)};
   }
   input[type="text"] {
+    background-color: inherit;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: none;
+    outline: none;
+    font-weight: 300;
+    color: ${({ theme }) => theme.typography.cardParam.color};
+    box-sizing: border-box;
+    font-size: ${({ fontsize }) => fontsize ? `${fontsize}px` : "1em"};
+    padding: ${({p}) => p ? `${p}px` : 0};
+  }
+  input[type="password"] {
     background-color: inherit;
     height: 100%;
     width: 100%;
@@ -69,7 +82,7 @@ const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolea
 
 const Textbox: 
   FC<EmotionProps<HTMLDivElement> & 
-  {outline?: boolean, type?: "text" | "number" | "tel", 
+  {outline?: boolean, type?: "text" | "number" | "tel" | "password", 
   fontsize?: number,
   placeholder?: string, maxLength?: number, 
   value?: string | number, 
