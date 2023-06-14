@@ -85,6 +85,20 @@ services:
       facade-good:
         aliases:
           - nginx
+  certbot:
+    image: certbot/certbot
+    container_name: facade-good-certbot
+    restart: unless-stopped
+    depends_on:
+      - nginx
+    volumes:
+      - etc-letsencrypt:/etc/letsencrypt
+      - www-html:/usr/share/nginx/html
+    command: certonly --webroot --webroot-path=/usr/share/nginx/html --email facade.good.ru@gmail.com --agree-tos -d facade-good.ru -d www.facade-good.ru
+    networks:
+      facade-good:
+        aliases:
+          - certbot
 
 volumes:
   www-html:
