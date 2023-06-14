@@ -10,6 +10,7 @@ import Glossiness from "./glossiness";
 import Accessories from "./accessories";
 import Facades from "./facades";
 import FacadeCards from "./facade-cards";
+import GalleryCards from "./gallery-cards";
 
 function EmptyTab() {
   return (
@@ -134,6 +135,18 @@ const AdminTabs: FC<Props> = ({
     case 7:
       return (
         <FacadeCards
+          data={data}
+          setError={setError}
+          setRefresh={setRefresh}
+          setToken={setToken}
+          setLoading={setLoading}
+          token={token}
+        />
+      );
+
+    case 8:
+      return (
+        <GalleryCards
           data={data}
           setError={setError}
           setRefresh={setRefresh}

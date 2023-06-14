@@ -53,8 +53,6 @@ export class GalleryItem {
   index: number;
 
   @Field((type) => [GalleryImage], { nullable: true })
-  @OneToMany(() => GalleryImage, (image) => image.item, {
-    eager: true,
-  })
+  @OneToMany(() => GalleryImage, (image) => image.item)
   images: GalleryImage[];
 }

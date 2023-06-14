@@ -32,6 +32,7 @@ export class GalleryService {
     private readonly itemRepository: Repository<GalleryItem>,
     @InjectRepository(GalleryImage)
     private readonly imageRepository: Repository<GalleryImage>,
+
     private readonly fileSystemService: FileSystemService,
     private readonly configService: ConfigService,
   ) {}
@@ -90,19 +91,11 @@ export class GalleryService {
           return throwError(() => new Error('Элемент галереи не найден.'));
         }
         const images = item.images;
-        return from(this.itemRepository.delete(item)).pipe(
-          concatMap(() => {
-            return from(images).pipe(
-              concatMap((image) =>
-                this.deleteImage(image).pipe(
-                  catchError((error) => {
-                    console.error(`Error deleting image: ${error}`);
-                    return of(null);
-                  }),
-                ),
-              ),
-            );
-          }),
+        if (!images?.length) {
+          return from(this.itemRepository.delete(item.id));
+        }
+        return forkJoin([images.map((img) => this.deleteImage(img))]).pipe(
+          switchMap(() => from(this.itemRepository.remove(item))),
         );
       }),
     );
@@ -131,7 +124,6 @@ export class GalleryService {
    */
   private deleteImage(image: GalleryImage): Observable<unknown> {
     const imageFolder = this.configService.get<string>('IMAGES_FOLDER');
-
     return from(this.imageRepository.delete({ id: image.id })).pipe(
       tap((result) =>
         console.log(`Deleted image ${image.id} from DB. Result:`, result),
@@ -175,7 +167,14 @@ export class GalleryService {
 
   /** Поиск одного элемента галереи по id */
   findOne(id: number): Observable<GalleryItem> {
-    return from(this.itemRepository.findOne({ where: { id } }));
+    return from(
+      this.itemRepository.findOne({
+        where: { id },
+        relations: {
+          images: true,
+        },
+      }),
+    );
   }
 
   /** Поиск нескольких элементов галереи, используя в качестве фильтра объект из полей */
@@ -185,6 +184,9 @@ export class GalleryService {
         where: {
           tag,
           category,
+        },
+        relations: {
+          images: true,
         },
       }),
     );

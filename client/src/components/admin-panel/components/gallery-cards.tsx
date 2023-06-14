@@ -8,20 +8,9 @@ import {
   GATSBY_API_HOST,
   GATSBY_API_PORT,
 } from "../../../settings/api.settings";
-import theme from "../../../theme";
-import { getSubtitle } from "../../../utils/get-subtitle";
+
 import {
-  CatalogImageGrid,
-  CatalogImageWrapper,
-} from "../../catalog/catalog-image-grid";
-import {
-  Card,
-  CardTitle,
-  CardImgBox,
-  CardSchemeBox,
-  CardFooter,
   Typography,
-  CardPrice,
   Box,
   EmotionProps,
   PrimaryButton,
@@ -32,9 +21,9 @@ import { Form } from "../../facade-good/form-components/form";
 import Textbox from "../../facade-good/form-components/textbox";
 import FileDropzone from "../../facade-good/form-components/file-dropzone";
 import { FacadeGood } from "../../../app-types";
-import Select from "react-select";
 import { FileWithPath } from "react-dropzone";
 import $api from "../../../http";
+import { ImageGrid, ImageWrapper } from "../../image-grid/gallery-grid";
 
 interface ItemResponce {
   title: string;
@@ -51,6 +40,7 @@ interface ItemResponce {
 
 const DeleteButton = styled("button")<EmotionProps<HTMLButtonElement>>`
   position: absolute;
+  cursor: pointer;
   top: 8px;
   right: 8px;
   z-index: 99;
@@ -110,7 +100,7 @@ interface Props {
   token: string | null;
 }
 
-const FacadeCards: FC<Props> = ({
+const GalleryCards: FC<Props> = ({
   token,
   data: hdbkData,
   setError,
@@ -131,6 +121,9 @@ const FacadeCards: FC<Props> = ({
     GALLERY_GET_ALL,
     {
       fetchPolicy: "no-cache",
+      variables: {
+        category: "Галерея",
+      },
     }
   );
 
@@ -145,7 +138,7 @@ const FacadeCards: FC<Props> = ({
     if (!loading) {
       if (data) {
         const { findAll: arr = [] } = data;
-        setItems([...arr].filter((d) => d.category !== "Галерея"));
+        setItems([...arr]);
       }
     }
   }, [loading, data]);
@@ -185,8 +178,8 @@ const FacadeCards: FC<Props> = ({
     event.stopPropagation();
     event.preventDefault();
 
-    if (!name || !material || !image1.length || !cardType?.value) {
-      setError("Название, материал, раздел галереи и фото, обязательные поля");
+    if (!name || !material || !image1.length) {
+      setError("Название, описание и фото, обязательные поля");
       return;
     }
     setLoading(true);
@@ -199,7 +192,7 @@ const FacadeCards: FC<Props> = ({
           description: "",
           params: "",
           tag: name,
-          category: cardType?.value,
+          category: "Галерея",
           index: 1,
         },
         {
@@ -269,12 +262,12 @@ const FacadeCards: FC<Props> = ({
           <Textbox
             outline
             p={9}
-            placeholder="Материал"
+            placeholder="Описание"
             value={material}
             onChange={(v) => setMaterial(String(v))}
           />
         </Box>
-        <Box css={{ width: 300, flex: 1 }}>
+        {/* <Box css={{ width: 300, flex: 1 }}>
           <Select
             value={cardType}
             onChange={(v) => setCardType(v)}
@@ -283,7 +276,7 @@ const FacadeCards: FC<Props> = ({
             noOptionsMessage={() => "Список пуст..."}
             styles={{}}
           />
-        </Box>
+        </Box> */}
 
         <Box>
           <PrimaryButton css={{ height: 42 }}>Добавить</PrimaryButton>
@@ -310,95 +303,67 @@ const FacadeCards: FC<Props> = ({
             placeholder="Добавьте фото изделия"
           />
         </Box>
-        <Box css={{ flex: 1 }}>
+        {/* <Box css={{ flex: 1 }}>
           <FileDropzone
             files={image2}
             onDrop={(files) => setImage2(files)}
             placeholder="Добавьте фото схемы"
           />
-        </Box>
+        </Box> */}
       </Box>
       <Divider />
-      <CatalogImageGrid>
+      <ImageGrid imageSize={280}>
         {items.map((item) => {
-          const images = [
-            ...(item?.images?.filter((i) => i.index === 0) || []),
-          ].sort((a, b) => Number(b.id) - Number(a.id));
-          const scheme = [
-            ...(item?.images?.filter((i) => i.index === 1) || []),
-          ].sort((a, b) => Number(b.id) - Number(a.id));
+          const images = item.images?.filter((i) => i.index === 0) || [];
           return (
-            <CatalogImageWrapper key={item.id}>
-              <DeletedBox
-                loading={deleteLoading}
-                deleteHandler={() => deleteHandler(item.id)}
-              >
-                <Card
+            <DeletedBox
+              loading={deleteLoading}
+              deleteHandler={() => deleteHandler(item.id)}
+            >
+              <ImageWrapper key={item.id} css={{ cursor: "pointer" }}>
+                {images.length && (
+                  <img
+                    className="SwiperImg"
+                    src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
+                    alt={item.title}
+                  />
+                )}
+                <Box
+                  className="tooltip"
                   css={{
-                    ":hover": {
-                      boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.06)",
-                    },
+                    display: Boolean(item.title) ? "block" : "none",
                   }}
                 >
-                  <CardTitle>{`${item.title}`}</CardTitle>
-                  <CardImgBox>
-                    {images.length && (
-                      <img
-                        className="SwiperImg"
-                        src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
-                        alt={item.title}
-                      />
-                    )}
-                  </CardImgBox>
-
-                  {scheme.length ? (
-                    <CardSchemeBox css={{ marginTop: 10 }} schemeheight={60}>
-                      <img
-                        className="SwiperImg"
-                        src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
-                        alt={item.title}
-                      />
-                    </CardSchemeBox>
-                  ) : (
-                    <CardSchemeBox
-                      css={{ marginTop: 10 }}
-                      schemeheight={60}
-                    ></CardSchemeBox>
-                  )}
-                  <CardFooter>
-                    <Box
-                      css={{
-                        flexGrow: 1,
-                        paddingLeft: 20,
-                      }}
+                  <Box
+                    css={{
+                      width: "100%",
+                      height: "100%",
+                      paddingLeft: 20,
+                      paddingRight: 20,
+                      paddingBottom: 20,
+                    }}
+                  >
+                    <Typography
+                      css={(theme: FacadeGood.CustomTheme) => ({
+                        ...theme.typography.cardName,
+                        fontSize: 18,
+                        color: theme.colors.white,
+                      })}
                     >
-                      <Typography
-                        css={{
-                          fontWeight: 400,
-                          color: theme.colors.cardTextSecondary,
-                        }}
-                      >{`Материал: ${
-                        getSubtitle(item.subtitle)[0]
-                      }`}</Typography>
-                      {getSubtitle(item.subtitle)[1] && (
-                        <Typography
-                          css={{
-                            fontWeight: 400,
-                            color: theme.colors.cardTextSecondary,
-                          }}
-                        >{`(${getSubtitle(item.subtitle)[1]})`}</Typography>
-                      )}
-                    </Box>
-                    <CardPrice>{item.params ? `${item.params}` : ""}</CardPrice>
-                  </CardFooter>
-                </Card>
-              </DeletedBox>
-            </CatalogImageWrapper>
+                      {item.title}
+                    </Typography>
+                    <Typography css={{ marginTop: 4, fontSize: 14 }}>
+                      {item.subtitle}
+                    </Typography>
+                  </Box>
+                </Box>
+              </ImageWrapper>
+            </DeletedBox>
           );
         })}
-      </CatalogImageGrid>
+      </ImageGrid>
     </Box>
   );
 };
 
-export default FacadeCards;
+export default GalleryCards;

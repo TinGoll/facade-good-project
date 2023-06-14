@@ -15,7 +15,6 @@ import { shuffle } from "../../utils/shuffle-array";
 import CatalogLinks from "./catalog-links";
 
 const Catalog = React.memo(() => {
-
   const { data, loading, error } =
     useQuery<GalleryImages.Root>(GALLERY_GET_ALL);
 
@@ -26,9 +25,14 @@ const Catalog = React.memo(() => {
     if (!loading) {
       if (data) {
         const { findAll: arr } = data;
-        const uniqueCatigories = [...new Set(arr.map((item) => item.category))];
 
-        const temp = shuffle([...arr]).slice(0, 10);
+        const filteredArr = arr.filter((d) => d.category !== "Галерея");
+
+        const uniqueCatigories = [
+          ...new Set(filteredArr.map((item) => item.category)),
+        ];
+
+        const temp = shuffle([...filteredArr]).slice(0, 10);
         setItems(temp);
         setCatigories(uniqueCatigories);
       }
@@ -42,7 +46,7 @@ const Catalog = React.memo(() => {
           <HeadText>Каталог фасадов</HeadText>
         </HeadTextWrapper>
         <CatalogLinks linkNames={catigories} css={{ marginTop: 60 }} />
-        
+
         <Carousel loading={loading} items={items} error={error?.message} />
       </Container>
     </SiteSection>

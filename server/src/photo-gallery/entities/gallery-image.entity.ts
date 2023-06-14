@@ -42,11 +42,6 @@ export class GalleryImage {
   @Column({ type: 'numeric', default: 0 })
   index: number;
 
-  @ManyToOne(() => GalleryItem, (item) => item.images, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  
+  @ManyToOne(() => GalleryItem, (item) => item.images)
   item: GalleryItem;
 }
