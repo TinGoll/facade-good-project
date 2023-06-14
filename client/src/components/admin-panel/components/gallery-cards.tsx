@@ -312,7 +312,7 @@ const GalleryCards: FC<Props> = ({
         </Box> */}
       </Box>
       <Divider />
-      <ImageGrid imageSize={280}>
+      <ImageGrid imagesize={280}>
         {items.map((item) => {
           const images = item.images?.filter((i) => i.index === 0) || [];
           return (

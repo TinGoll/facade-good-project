@@ -5,7 +5,7 @@ import { GalleryImages } from "../../gatsby-plugin-apollo/queries/gallery.query"
 import { FacadeGood } from "../../app-types";
 import { GATSBY_API_HOST, GATSBY_API_PORT } from "../../settings/api.settings";
 
-export const ImageGrid = styled(Box)<{ imageSize?: number }>((props) => ({
+export const ImageGrid = styled(Box)<{ imagesize?: number }>((props) => ({
   display: "grid",
   gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
   [props.theme.mq.desktop]: {
@@ -13,7 +13,7 @@ export const ImageGrid = styled(Box)<{ imageSize?: number }>((props) => ({
   },
   [props.theme.mq.largeDesktop]: {
     gridTemplateColumns: `repeat(auto-fit, minmax(${
-      props.imageSize ? props.imageSize : 450
+      props.imagesize ? props.imagesize : 450
     }px, 1fr))`,
   },
   gridGap: "20px",
