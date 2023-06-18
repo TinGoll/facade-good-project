@@ -13,12 +13,17 @@ const DropZone = styled("div")<EmotionProps<HTMLDivElement>>`
   background-color: rgba(57, 76, 96, 0.04);
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   &.active {
-    background-color: rgba(57, 76, 96, 0.01);
+    background-color: ${({ theme }) => theme.colors.listSelected};
+    outline: 2px solid ${({ theme }) => theme.colors.button.normal};
   }
   & p {
     padding-left: 16px;
     padding-right: 16px;
     text-align: center;
+  }
+  :hover {
+    background-color: ${({ theme }) => theme.colors.white};
+    outline: 2px solid ${({ theme }) => theme.colors.button.normal};
   }
 `;
 

@@ -6,6 +6,12 @@ import useOrderForm from "./use-order-form";
 import $api from "../../http";
 import { Order } from "./order-form-provider";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { AxiosError } from "axios";
+
+const MySwal = withReactContent(Swal);
+
 const Errors = {
   WEIGHT_LIMIT_EXCEEDED: "Превышен лимит веса файлов",
   EXCEEDED_QUANTITY: "Превышено максимально количество файлов",
@@ -161,14 +167,38 @@ function SubmitButton({ clearAllFields }: Props) {
       .post("/orders", formData)
       .then((response) => {
         // Обработка успешного ответа
-        console.log("response", response);
         setLoading(false);
         resetHandler();
+        MySwal.fire({
+          title: <strong>Удачно!</strong>,
+          html: (
+            <>
+              Спасибо, Ваш заказ отправлен!
+              <br />
+              Так же, копия заказа будет отправлена на Ваш электронный адрес.
+            </>
+          ),
+          icon: "success",
+          confirmButtonColor: "#FFB421",
+        });
       })
-      .catch((error) => {
+      .catch((error: AxiosError<{ message: string }>) => {
         // Обработка ошибки
-        console.error("error", error);
         setLoading(false);
+        MySwal.fire({
+          title: <strong>Неудачно :(</strong>,
+          html: (
+            <>
+              К сожалению, заказ не отправлен.
+              <br />
+              {`Код ошибки: ${error.response?.status}`}
+              <br />
+              {error?.response?.data?.message}
+            </>
+          ),
+          icon: "error",
+          confirmButtonColor: "#FFB421",
+        });
       });
   };
 

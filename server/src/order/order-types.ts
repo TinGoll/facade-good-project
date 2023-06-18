@@ -1,5 +1,4 @@
 declare module Order {
-
   interface Data {
     header: Order.Header;
     facades: Order.Facade[];
@@ -20,7 +19,8 @@ declare module Order {
 
     date?: string;
     mail?: string;
-    phone?:string;
+    phone?: string;
+    title?: string;
   }
 
   interface Facade {
