@@ -1,31 +1,33 @@
 import { Injectable } from '@nestjs/common';
 // import puppeteer from 'puppeteer';
 import { Observable, from } from 'rxjs';
-import * as pdf from 'html-pdf';
+
+import * as wkhtmltopdf from 'wkhtmltopdf';
 
 @Injectable()
 export class PdfCreator {
   get(html: string): Observable<Buffer> {
-    return this.crate_pdf(html);
+    return from(this.crate_pdf(html));
   }
 
-  private crate_pdf(html: string) {
-    return new Observable<Buffer>((observer) => {
-      pdf
-        .create(html, {
-          format: 'A4',
-        })
-        .toBuffer((err, buffer) => {
-          if (err) {
-            observer.error(err);
+  private async crate_pdf(html: string) {
+    try {
+      return new Promise<Buffer>((resolve, reject) => {
+        wkhtmltopdf(html, {}, (error: any, stream: any) => {
+          if (error) {
+            reject(error);
           } else {
-            console.log('buffer', buffer);
-
-            observer.next(buffer);
-            observer.complete();
+            const chunks: Buffer[] = [];
+            stream.on('data', (chunk: Buffer) => chunks.push(chunk));
+            stream.on('end', () => resolve(Buffer.concat(chunks)));
+            stream.on('error', (error: any) => reject(error));
           }
         });
-    });
+      });
+    } catch (error) {
+      console.error('Ошибка при создании PDF:', error);
+      throw error;
+    }
   }
 
   // private async crate_pdf(html: string, templateName?: string) {
