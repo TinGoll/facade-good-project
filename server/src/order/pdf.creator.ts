@@ -10,10 +10,9 @@ export class PdfCreator {
 
   private async crate_pdf(html: string, templateName?: string) {
     try {
-      const browser = await puppeteer.launch(); // запускаем браузер
-      const page = await browser.newPage(); // создаем новую вкладку
-      await page.goto(html, { waitUntil: 'networkidle0' });
-      // const pdf = await page.pdf({ format: "A4", path: path.resolve(__dirname, templateName) }); // с сохранением файла.
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.setContent(html);
       const pdf = await page.pdf({ format: 'A4' });
       await browser.close();
       return pdf;
