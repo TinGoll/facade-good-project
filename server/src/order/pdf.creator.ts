@@ -10,6 +10,7 @@ export class PdfCreator {
 
   private async crate_pdf(html: string, templateName?: string) {
     try {
+      process.env.MAX_CONCURRENT_SESSIONS = '1';
       const browser = await puppeteer.launch({
         headless: false,
         args: ['--no-sandbox', '--single-process'],
