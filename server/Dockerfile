@@ -6,7 +6,7 @@ COPY . .
 RUN npm rebuild --verbose sharp
 RUN npm run build
 
-FROM buildkite/ffmpeg:4
+FROM puppeteer/standalone:latest
 WORKDIR /app
 COPY --from=builder /app ./
 
