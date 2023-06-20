@@ -9,6 +9,10 @@ RUN npm run build
 FROM node:16-alpine
 WORKDIR /app
 COPY --from=builder /app ./
+
+# Установка Chromium
+RUN apk add --no-cache chromium
+
 EXPOSE 3000
 
 CMD ["npm", "run", "start:prod"]
