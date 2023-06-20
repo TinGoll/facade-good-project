@@ -1,12 +1,12 @@
 FROM node:16-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+COPY /*.json ./
 COPY . .
+RUN npm install
 RUN npm rebuild --verbose sharp
 RUN npm run build
 
-FROM puppeteer/standalone:latest
+FROM node:16-alpine
 WORKDIR /app
 COPY --from=builder /app ./
 

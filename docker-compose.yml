@@ -50,6 +50,7 @@ services:
     volumes:
       - assets:/app/assets
       - etc-letsencrypt:/etc/letsencrypt
+      - /usr/bin/chromium-browser:/usr/bin/chromium-browser
     networks:
       facade-good:
         aliases:
