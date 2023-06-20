@@ -1,22 +1,14 @@
 FROM node:16-alpine AS builder
 WORKDIR /app
-COPY /*.json ./
-COPY . .
+COPY package*.json ./
 RUN npm install
+COPY . .
 RUN npm rebuild --verbose sharp
 RUN npm run build
 
-FROM pptrdocker/pptr-alpine:latest
+FROM zenika/alpine-chrome:latest
 WORKDIR /app
-COPY --from=builder /app ./
-
-# Установка зависимостей для Chromium
-RUN apk add --no-cache \
-    libstdc++ \
-    chromium
-
-# Установка переменной среды для Puppeteer
-ENV PUPPETEER_EXECUTABLE_PATH="/usr/bin/chromium-browser"
+COPY --from=builder /app .
 
 EXPOSE 3000
 
