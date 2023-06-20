@@ -13,7 +13,8 @@ export class PdfCreator {
       const browser = await puppeteer.launch({
         headless: false,
         args: ['--no-sandbox'],
-        executablePath: '/usr/bin/chromium-browser',
+        // executablePath: '/usr/bin/chromium-browser',
+        executablePath: '/usr/bin/chromium',
       });
       const page = await browser.newPage();
       await page.setContent(html);
