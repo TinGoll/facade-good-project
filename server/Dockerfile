@@ -6,9 +6,9 @@ COPY . .
 RUN npm rebuild --verbose sharp
 RUN npm run build
 
-FROM zenika/alpine-chrome:latest
+FROM buildkite/ffmpeg:4
 WORKDIR /app
-COPY --from=builder /app .
+COPY --from=builder /app ./
 
 EXPOSE 3000
 
