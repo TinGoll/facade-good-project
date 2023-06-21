@@ -24,6 +24,9 @@ services:
     container_name: server-facade-good
     build:
       context: ./server
+    privileged: true
+    security_opt:
+      - seccomp:unconfined
     depends_on:
       - db
     restart: unless-stopped
