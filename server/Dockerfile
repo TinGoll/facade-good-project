@@ -8,6 +8,7 @@ RUN npm run build
 
 FROM zenika/alpine-chrome
 
+USER root
 RUN apk add sudo
 
 # Установка зависимостей Chrome для Puppeteer
@@ -26,5 +27,4 @@ WORKDIR /app
 COPY --from=builder /app ./
 
 EXPOSE 3000
-USER root
 CMD ["npm", "run", "start:prod"]
