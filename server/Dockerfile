@@ -1,14 +1,17 @@
-FROM zenika/alpine-chrome AS builder
-
-FROM node:16-alpine
-
+FROM node:16-alpine AS builder
 WORKDIR /app
+COPY /*.json ./
+COPY . .
+RUN npm install
+RUN npm rebuild --verbose sharp
+RUN npm run build
+
+FROM zenika/alpine-chrome
 
 # Установка зависимостей Chrome для Puppeteer
 RUN apk add --no-cache \
         udev \
         ttf-freefont \
-        chromium \
         harfbuzz \
         nss \
         freetype \
@@ -17,16 +20,8 @@ RUN apk add --no-cache \
         dbus \
         xvfb
 
-# Копирование зависимостей Chrome из образа builder
-COPY --from=builder /usr/bin/chromium-browser /usr/bin/chromium-browser
-COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
-
-# Установка зависимостей приложения
-COPY package.json package-lock.json ./
-RUN npm install --production
-
-# Копирование остальных файлов приложения
-COPY . .
+WORKDIR /app
+COPY --from=builder /app ./
 
 EXPOSE 3000
 
