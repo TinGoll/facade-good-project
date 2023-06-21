@@ -1,4 +1,3 @@
-
 FROM node:16-alpine AS builder
 WORKDIR /app
 COPY /*.json ./
@@ -20,8 +19,10 @@ RUN apk add --no-cache \
         zlib \
         dbus \
         xvfb
-        
-USER root
+
+# Добавление пользователя и группы
+RUN addgroup -S myuser && adduser -S -G myuser myuser
+USER myuser
 
 WORKDIR /app
 COPY --from=builder /app ./
