@@ -11,13 +11,24 @@ export class PdfCreator {
   private async crate_pdf(html: string, templateName?: string) {
     try {
       const browser = await puppeteer.launch({
-        devtools:false,
+        devtools: false,
         headless: 'new',
-        args: ['--no-sandbox', '--single-process'],
+        // args: ['--no-sandbox', '--single-process'],
+        args: [
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--disable-setuid-sandbox',
+          '--no-first-run',
+          '--no-sandbox',
+          '--no-zygote',
+          '--deterministic-fetch',
+          '--disable-features=IsolateOrigins',
+          '--disable-site-isolation-trials',
+          // '--single-process',
+        ],
         executablePath: '/usr/bin/chromium-browser',
         // executablePath: '/usr/bin/chromium',
         // executablePath: '/usr/bin/google-chrome',
-
       });
       const page = await browser.newPage();
       await page.setContent(html);
