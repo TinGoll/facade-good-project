@@ -51,6 +51,7 @@ services:
       - assets:/app/assets
       - etc-letsencrypt:/etc/letsencrypt
       - /usr/bin/chromium-browser:/usr/bin/chromium-browser
+      - /root/.cache/puppeteer:/root/.cache/puppeteer
     networks:
       facade-good:
         aliases:
