@@ -9,7 +9,7 @@ RUN npm run build
 FROM zenika/alpine-chrome
 
 # Установка зависимостей Chrome для Puppeteer
-RUN sudo apk --no-cache add \
+RUN apk --no-cache add \
         udev \
         ttf-freefont \
         harfbuzz \
