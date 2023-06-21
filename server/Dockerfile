@@ -9,7 +9,7 @@ RUN npm run build
 FROM zenika/alpine-chrome
 
 # Установка зависимостей Chrome для Puppeteer
-RUN apk add --no-cache \
+RUN apk --no-cache add \
         udev \
         ttf-freefont \
         harfbuzz \
@@ -19,10 +19,6 @@ RUN apk add --no-cache \
         zlib \
         dbus \
         xvfb
-
-# Добавление пользователя и группы
-RUN addgroup -S myuser && adduser -S -G myuser myuser
-USER myuser
 
 WORKDIR /app
 COPY --from=builder /app ./
