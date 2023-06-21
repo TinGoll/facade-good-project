@@ -14,9 +14,10 @@ export class PdfCreator {
         devtools:false,
         headless: 'new',
         args: ['--no-sandbox', '--single-process'],
-        // executablePath: '/usr/bin/chromium-browser',
+        executablePath: '/usr/bin/chromium-browser',
         // executablePath: '/usr/bin/chromium',
         // executablePath: '/usr/bin/google-chrome',
+
       });
       const page = await browser.newPage();
       await page.setContent(html);
