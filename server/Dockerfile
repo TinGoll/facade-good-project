@@ -1,3 +1,4 @@
+
 FROM node:16-alpine AS builder
 WORKDIR /app
 COPY /*.json ./
@@ -19,6 +20,8 @@ RUN apk add --no-cache \
         zlib \
         dbus \
         xvfb
+        
+USER root
 
 WORKDIR /app
 COPY --from=builder /app ./
