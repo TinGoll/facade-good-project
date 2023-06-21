@@ -9,7 +9,7 @@ RUN npm run build
 FROM zenika/alpine-chrome
 
 # Установка зависимостей Chrome для Puppeteer
-RUN apk --no-cache add \
+RUN sudo apk --no-cache add \
         udev \
         ttf-freefont \
         harfbuzz \
@@ -24,5 +24,5 @@ WORKDIR /app
 COPY --from=builder /app ./
 
 EXPOSE 3000
-
+USER root
 CMD ["npm", "run", "start:prod"]
