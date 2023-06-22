@@ -6,13 +6,12 @@ RUN npm install
 RUN npm rebuild --verbose sharp
 RUN npm run build
 
-FROM zenika/alpine-chrome
+FROM zenika/alpine-chrome:with-playwright
 
 USER root
-RUN apk add sudo
 
 # Установка зависимостей Chrome для Puppeteer
-RUN sudo apk --no-cache add \
+RUN apk --no-cache add \
         udev \
         ttf-freefont \
         harfbuzz \

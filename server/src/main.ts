@@ -9,6 +9,9 @@ const whitelist = ['https://facade-good.ru', 'http://localhost:8000', 'http://lo
 async function bootstrap() {
   const httpsOptions = getHttpsOptions();
 
+  console.log("Запуск!!!!!");
+  
+
   const app = await NestFactory.create(AppModule, {
     httpsOptions,
   });
