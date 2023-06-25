@@ -14,7 +14,7 @@ import { PdfCreator } from './pdf.creator';
 import { OrderDataService } from './services/order.data.service';
 import { ORDER_PDF_TEMPLATE } from './templates/order-pdf-template';
 import { Readable } from 'stream';
-import moment from 'moment';
+import * as moment from 'moment';
 
 const ORDER_NUMBER = 'order_number';
 interface OrderData {
@@ -82,7 +82,7 @@ export class OrderInterceptor implements NestInterceptor {
         ord.orderNumber++;
         data.header.title = `Заказ ${
           ord.orderNumber
-        } от ${new Date().toLocaleString()}`;
+        } от ${moment().format('L')}`;
 
         const convertToHTMLObservable = this.convertToHTML(data).pipe(
           catchError((error) => {

@@ -19,12 +19,16 @@ export class OrderDataService {
     return this.find_by_name(name).pipe(
       switchMap((candidate) => {
         if (!candidate) {
+          console.log("Создаем новые данные ", name);
+          
           const newData = this.repository.create();
           newData.name = name;
           newData.data = data;
           return this.save(newData);
         }
+
         candidate.data = data;
+        console.log("Обновляем данные ", name);
         return this.save(candidate);
       }),
     );
@@ -37,6 +41,8 @@ export class OrderDataService {
     return this.find_by_name(name).pipe(
       switchMap((entity) => {
         if (entity) {
+          console.log(name, "Не существует.");
+          
           return of(entity.data as Data);
         }
         return of(defaultData);
