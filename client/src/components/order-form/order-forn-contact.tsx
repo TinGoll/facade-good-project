@@ -45,12 +45,7 @@ const OrderFornContact: FC<Props> = ({ clearFields, setClearFields }) => {
   }, [clearFields, setClearFields]);
 
   const formatPhoneNumber = useCallback((phoneNumber: string = "") => {
-    let cleaned = ("" + phoneNumber).replace(/\D/g, "");
-
-    if (cleaned[0] !== "+") {
-      cleaned = "+7" + cleaned;
-    }
-
+    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
     const match = cleaned.match(/^(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/);
 
     if (match) {

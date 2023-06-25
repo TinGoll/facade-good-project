@@ -6,14 +6,15 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import * as nodemailer from 'nodemailer';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
-import * as nodemailer from 'nodemailer';
 import handlebars from 'handlebars';
 import { PdfCreator } from './pdf.creator';
 import { OrderDataService } from './services/order.data.service';
 import { ORDER_PDF_TEMPLATE } from './templates/order-pdf-template';
 import { Readable } from 'stream';
+import moment from 'moment';
 
 const ORDER_NUMBER = 'order_number';
 interface OrderData {
@@ -39,18 +40,7 @@ export class OrderInterceptor implements NestInterceptor {
     const textCompany =
       formData.text ||
       `Заказ мебельных фасадов от ${new Date().toLocaleString()}`;
-    const textDuplicate = `Уважаемый клиент,
 
-    Благодарим Dас за ваш заказ! Мы ценим ваше доверие и обещаем обработать его в кратчайшие сроки. Наша команда уже занимается его обработкой и подготовкой к отправке.
-    
-    Во вложении вы найдете копию вашего заказа для вашего удобства и контроля.
-    
-    Если у вас возникнут какие-либо вопросы или потребуется дополнительная информация, не стесняйтесь связаться с нашей службой поддержки. Мы всегда готовы помочь вам.
-    
-    Спасибо еще раз за ваш заказ! Мы ценим ваше сотрудничество.
-    
-    С наилучшими пожеланиями,
-    Команда Facade-good`;
     const data: Order.Data = {
       header,
       facades,
@@ -128,7 +118,7 @@ export class OrderInterceptor implements NestInterceptor {
           switchMap((pdf) =>
             this.sendEmail(
               ord.orderNumber,
-              textDuplicate,
+              this.clientText(ord.orderNumber, moment().format('L')),
               `${data.header!.title} (facade-good.ru)`,
               [],
               pdf,
@@ -223,6 +213,21 @@ export class OrderInterceptor implements NestInterceptor {
         }
       });
     });
+  }
+
+  clientText(orderNumber: number, date: string): string {
+    return `Уважаемый клиент,
+
+    Благодарим Вас за ваш заказ! Мы ценим ваше доверие и обещаем обработать его в кратчайшие сроки. Наша команда уже занимается его обработкой и подготовкой к отправке.
+    
+    Во вложении вы найдете копию вашего заказа №${orderNumber} от ${date} для вашего удобства и контроля.
+    
+    Если у вас возникнут какие-либо вопросы или потребуется дополнительная информация, не стесняйтесь связаться с нашей службой поддержки. Мы всегда готовы помочь вам.
+    
+    Спасибо еще раз за ваш заказ! Мы ценим ваше сотрудничество.
+    
+    С наилучшими пожеланиями,
+    Команда Facade-good`;
   }
 
   convertToTranslit(cyrillicText: string): string {
