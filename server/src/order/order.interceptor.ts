@@ -15,6 +15,7 @@ import { ORDER_TEMPLATE } from './templates/order-template';
 import { PdfCreator } from './pdf.creator';
 import { OrderDataService } from './services/order.data.service';
 import { ORDER_PDF_TEMPLATE } from './templates/order-pdf-template';
+import { Readable } from 'stream';
 
 const ORDER_NUMBER = 'order_number';
 interface OrderData {
@@ -48,6 +49,12 @@ export class OrderInterceptor implements NestInterceptor {
       accessories,
       files,
     };
+
+    const { files: _, ...importData } = data;
+
+    const importFile = new Readable();
+    importFile.push(JSON.stringify(importData));
+    importFile.push(null);
 
     const host = process.env.SMPT_HOST;
     const port = process.env.SMTP_PORT;
@@ -101,7 +108,7 @@ export class OrderInterceptor implements NestInterceptor {
               data.header!.title,
               data.files,
               pdf,
-              null,
+              importFile,
               options,
               from,
               to,
@@ -164,7 +171,7 @@ export class OrderInterceptor implements NestInterceptor {
     // html: string,
     files: any[],
     pdfBuffer: Buffer,
-    importFile: any | null,
+    importFile: Readable | null,
     options: any,
     from: string,
     to: string,
@@ -188,6 +195,12 @@ export class OrderInterceptor implements NestInterceptor {
         })),
       ],
     };
+    if (importFile) {
+      mailOptions.attachments.push({
+        filename: `ORD_N$${orderNumber}.txt`,
+        content: importFile,
+      });
+    }
 
     return new Observable<void>((observer) => {
       transporter.sendMail(mailOptions, (error, info) => {
