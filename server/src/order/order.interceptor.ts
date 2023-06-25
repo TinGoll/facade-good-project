@@ -9,9 +9,7 @@ import {
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import * as nodemailer from 'nodemailer';
-import { ConfigService } from '@nestjs/config';
 import handlebars from 'handlebars';
-import { ORDER_TEMPLATE } from './templates/order-template';
 import { PdfCreator } from './pdf.creator';
 import { OrderDataService } from './services/order.data.service';
 import { ORDER_PDF_TEMPLATE } from './templates/order-pdf-template';
@@ -25,7 +23,6 @@ interface OrderData {
 @Injectable()
 export class OrderInterceptor implements NestInterceptor {
   constructor(
-    private readonly configService: ConfigService,
     private readonly pdfCreator: PdfCreator,
     private readonly orderData: OrderDataService,
   ) {}
