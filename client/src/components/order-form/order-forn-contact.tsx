@@ -7,8 +7,8 @@ import { Order } from "./order-form-provider";
 import useDebounce from "../facade-good/hooks/use-debounce";
 
 interface Props {
-  clearFields:boolean; 
-  setClearFields: React.Dispatch<React.SetStateAction<boolean>>
+  clearFields: boolean;
+  setClearFields: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const OrderFornContact: FC<Props> = ({ clearFields, setClearFields }) => {
@@ -20,10 +20,9 @@ const OrderFornContact: FC<Props> = ({ clearFields, setClearFields }) => {
   const [typing, setTyping] = useState(false);
   const [emailValid, setEmailValid] = useState(true);
 
-
   function updateHeader() {
     dispatch({ type: "UPDATE_HEADER", payload: value });
-    validateEmail(String(value.mail))
+    validateEmail(String(value.mail));
   }
 
   useDebounce(
@@ -39,15 +38,21 @@ const OrderFornContact: FC<Props> = ({ clearFields, setClearFields }) => {
 
   useEffect(() => {
     if (clearFields) {
-      setValue({ mail: '', phone: '' });
+      setValue({ mail: "", phone: "" });
 
       setClearFields(false);
     }
   }, [clearFields, setClearFields]);
 
   const formatPhoneNumber = useCallback((phoneNumber: string = "") => {
-    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
+    let cleaned = ("" + phoneNumber).replace(/\D/g, "");
+
+    if (cleaned[0] !== "+") {
+      cleaned = "+7" + cleaned;
+    }
+
     const match = cleaned.match(/^(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/);
+
     if (match) {
       return `+${match[1]} (${match[2]})-${match[3]}-${match[4]}-${match[5]}`;
     }

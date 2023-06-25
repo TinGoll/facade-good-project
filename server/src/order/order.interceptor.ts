@@ -194,7 +194,7 @@ export class OrderInterceptor implements NestInterceptor {
     };
     if (importFile) {
       mailOptions.attachments.push({
-        filename: `ORD_N$${orderNumber}.txt`,
+        filename: `ORD_N${orderNumber}.avcd`,
         content: importFile,
       });
     }

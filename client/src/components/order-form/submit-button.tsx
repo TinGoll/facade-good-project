@@ -9,6 +9,7 @@ import { Order } from "./order-form-provider";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { AxiosError } from "axios";
+import moment from "moment";
 
 const MySwal = withReactContent(Swal);
 
@@ -99,7 +100,7 @@ function SubmitButton({ clearAllFields }: Props) {
       thermalseam: state.header.thermalseam?.value || "--",
       roll: state.header.roll?.value || "--",
       note: state.header.note || "",
-      date: new Date().toLocaleDateString(),
+      date: moment().format("l"),
       mail: state.header.mail || "--",
       phone: state.header.phone || "--",
     };
@@ -107,48 +108,19 @@ function SubmitButton({ clearAllFields }: Props) {
       header,
       facades: state.facades
         .filter((v) => {
-          let chek = false;
-          for (const key in v) {
-            const item = v[key as keyof Order.Facade];
-            if (typeof item === "object") {
-              if (item.value) {
-                chek = true;
-                break;
-              }
-            } else {
-              if (item) {
-                chek = true;
-                break;
-              }
-            }
-          }
-          return chek;
+          return Boolean(v.height || v.amount);
         })
-        .map((v) => ({ ...v, type: v.type?.value })),
+        .map((v, i) => ({ ...v, type: v.type?.value, num: i + 1 })),
 
       accessories: state.accessories
         .filter((v) => {
-          let chek = false;
-          for (const key in v) {
-            const item = v[key as keyof Order.Accessorie];
-            if (typeof item === "object") {
-              if (item.value) {
-                chek = true;
-                break;
-              }
-            } else {
-              if (item) {
-                chek = true;
-                break;
-              }
-            }
-          }
-          return chek;
+          return Boolean(v.height || v.amount);
         })
-        .map((v) => ({
+        .map((v, i) => ({
           ...v,
           model: v.model?.value,
           type: v.type?.value,
+          num: i + 1,
         })),
       files: state.files,
     };

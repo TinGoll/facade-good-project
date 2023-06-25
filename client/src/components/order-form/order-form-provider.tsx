@@ -57,6 +57,7 @@ declare module Order {
 
   interface Facade {
     id: string | number;
+    num?: number,
     height?: number;
     width?: number;
     amount?: number;
@@ -66,6 +67,7 @@ declare module Order {
 
   interface Accessorie {
     id: number | string;
+    num?: number,
     type?: SelectOption;
     model?: SelectOption;
     height?: number;
