@@ -11,10 +11,10 @@ import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import handlebars from 'handlebars';
 import { PdfCreator } from './pdf.creator';
-import { OrderDataService } from './services/order.data.service';
 import { ORDER_PDF_TEMPLATE } from './templates/order-pdf-template';
 import { Readable } from 'stream';
 import * as moment from 'moment';
+import { OrderService } from './services/order.service';
 
 const ORDER_NUMBER = 'order_number';
 interface OrderData {
@@ -25,7 +25,7 @@ interface OrderData {
 export class OrderInterceptor implements NestInterceptor {
   constructor(
     private readonly pdfCreator: PdfCreator,
-    private readonly orderData: OrderDataService,
+    private readonly orderService: OrderService,
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -77,10 +77,9 @@ export class OrderInterceptor implements NestInterceptor {
       },
     } as any;
 
-    return this.orderData.get<OrderData>(ORDER_NUMBER, { orderNumber: 0 }).pipe(
+    return this.orderService.create({ data: importData }).pipe(
       switchMap((ord) => {
-        ord.orderNumber++;
-        data.header.title = `Заказ ${ord.orderNumber} от ${moment().format(
+        data.header.title = `Заказ ${ord.id} от ${moment().format(
           'DD.MM.YYYY',
         )}`;
 
@@ -101,7 +100,7 @@ export class OrderInterceptor implements NestInterceptor {
         const sendCompanyEmailObservable = convertToPDFObservable.pipe(
           switchMap((pdf) =>
             this.sendEmail(
-              ord.orderNumber,
+              ord.id,
               textCompany,
               data.header!.title,
               data.files,
@@ -117,8 +116,8 @@ export class OrderInterceptor implements NestInterceptor {
         const sendDuplicateEmailObservable = convertToPDFObservable.pipe(
           switchMap((pdf) =>
             this.sendEmail(
-              ord.orderNumber,
-              this.clientText(ord.orderNumber, moment().format('DD.MM.YYYY')),
+              ord.id,
+              this.clientText(ord.id, moment().format('DD.MM.YYYY')),
               `${data.header!.title} (facade-good.ru)`,
               [],
               pdf,
@@ -136,16 +135,6 @@ export class OrderInterceptor implements NestInterceptor {
         ];
 
         return forkJoin(emailObservables).pipe(
-          tap(() => {
-            const setOrderDataObservable = new Observable((observer) => {
-              this.orderData.set<OrderData>(ORDER_NUMBER, {
-                orderNumber: ord.orderNumber,
-              });
-              observer.next();
-              observer.complete();
-            });
-            return setOrderDataObservable;
-          }),
           switchMap(() => next.handle()),
           catchError((error) => {
             console.error('Ошибка при отправке письма:', error);
