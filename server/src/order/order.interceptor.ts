@@ -39,7 +39,7 @@ export class OrderInterceptor implements NestInterceptor {
 
     const textCompany =
       formData.text ||
-      `Заказ мебельных фасадов от ${new Date().toLocaleString()}`;
+      `Заказ мебельных фасадов от ${moment().format('DD.MM.YYYY')}`;
 
     const data: Order.Data = {
       header,
@@ -80,9 +80,9 @@ export class OrderInterceptor implements NestInterceptor {
     return this.orderData.get<OrderData>(ORDER_NUMBER, { orderNumber: 0 }).pipe(
       switchMap((ord) => {
         ord.orderNumber++;
-        data.header.title = `Заказ ${
-          ord.orderNumber
-        } от ${moment().format('L')}`;
+        data.header.title = `Заказ ${ord.orderNumber} от ${moment().format(
+          'DD.MM.YYYY',
+        )}`;
 
         const convertToHTMLObservable = this.convertToHTML(data).pipe(
           catchError((error) => {
@@ -118,7 +118,7 @@ export class OrderInterceptor implements NestInterceptor {
           switchMap((pdf) =>
             this.sendEmail(
               ord.orderNumber,
-              this.clientText(ord.orderNumber, moment().format('L')),
+              this.clientText(ord.orderNumber, moment().format('DD.MM.YYYY')),
               `${data.header!.title} (facade-good.ru)`,
               [],
               pdf,
@@ -137,7 +137,9 @@ export class OrderInterceptor implements NestInterceptor {
 
         return forkJoin(emailObservables).pipe(
           tap(() => {
-            this.orderData.set<OrderData>(ORDER_NUMBER, ord);
+            this.orderData.set<OrderData>(ORDER_NUMBER, {
+              orderNumber: ord.orderNumber,
+            });
           }),
           switchMap(() => next.handle()),
           catchError((error) => {
