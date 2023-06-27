@@ -137,9 +137,14 @@ export class OrderInterceptor implements NestInterceptor {
 
         return forkJoin(emailObservables).pipe(
           tap(() => {
-            this.orderData.set<OrderData>(ORDER_NUMBER, {
-              orderNumber: ord.orderNumber,
+            const setOrderDataObservable = new Observable((observer) => {
+              this.orderData.set<OrderData>(ORDER_NUMBER, {
+                orderNumber: ord.orderNumber,
+              });
+              observer.next();
+              observer.complete();
             });
+            return setOrderDataObservable;
           }),
           switchMap(() => next.handle()),
           catchError((error) => {
