@@ -208,6 +208,7 @@ export const ORDER_PDF_TEMPLATE = `
           </tbody>
         </table>
       </div>
+      {{#if accessories.length}}
       <div>
         <table class="order_table">
           <thead>
@@ -232,6 +233,7 @@ export const ORDER_PDF_TEMPLATE = `
           </tbody>
         </table>
       </div>
+      {{/if}}
     </div>
   </body>
 </html>

@@ -39,20 +39,9 @@ const OrderFornContact: FC<Props> = ({ clearFields, setClearFields }) => {
   useEffect(() => {
     if (clearFields) {
       setValue({ mail: "", phone: "" });
-
       setClearFields(false);
     }
   }, [clearFields, setClearFields]);
-
-  const formatPhoneNumber = useCallback((phoneNumber: string = "") => {
-    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
-    const match = cleaned.match(/^(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/);
-
-    if (match) {
-      return `+${match[1]} (${match[2]})-${match[3]}-${match[4]}-${match[5]}`;
-    }
-    return phoneNumber;
-  }, []);
 
   const validateEmail = (value: string) => {
     if (!value) {
@@ -62,16 +51,48 @@ const OrderFornContact: FC<Props> = ({ clearFields, setClearFields }) => {
     setEmailValid(emailRegex.test(value));
   };
 
+  const handleInputChange = (phone: string) => {
+    let value = phone;
+
+    // Удаляем все нецифровые символы из введенного значения, сохраняя "+"
+    value = value.replace(/[^\d+]/g, "");
+
+    // Проверяем и изменяем первую цифру, если необходимо
+    if (value.length > 0) {
+      if (value[0] === "7") {
+        value = `+${value}`;
+      } else if (value[0] === "8") {
+        value = `+7${value.slice(1)}`;
+      } else if (value[0] === "9") {
+        value = `+79${value.slice(1)}`;
+      }
+    }
+
+    // Проверяем длину значения
+    if (value.length === 12) {
+      // Форматируем строку вида: +7 (###)-###-##-##
+      value = `+7 (${value.slice(2, 5)})-${value.slice(5, 8)}-${value.slice(
+        8,
+        10
+      )}-${value.slice(10, 12)}`;
+    }
+    setTyping(true);
+    setValue((prev) => ({ ...prev, phone: value }));
+  };
+
   return (
     <Box css={{ padding: 16 }}>
       <Grid columns={3} gap={16}>
         <Textbox
-          value={formatPhoneNumber(value.phone)}
-          onChange={(phone) => {
-            setTyping(true);
-            setValue((prev) => ({ ...prev, phone: String(phone) }));
-          }}
-          placeholder="Телефон *"
+          value={value.phone}
+          onChange={(phone) => handleInputChange(String(phone))}
+          // value={formatPhoneNumber(value.phone)}
+          // onChange={(phone) => {
+          //   setTyping(true);
+          //   setValue((prev) => ({ ...prev, phone: String(phone) }));
+          // }}
+
+          placeholder="Тел: +7 (___)-___-__-__"
           outline
           maxLength={120}
           fontsize={18}

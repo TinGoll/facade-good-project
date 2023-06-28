@@ -2,11 +2,21 @@ import styled from "@emotion/styled";
 import React, { FC } from "react";
 import { EmotionProps } from "../facade-good";
 
-const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolean, type?: "text" | "number" | "tel" | "password", fontsize?: number, p?: number, error?:boolean}>`
+const Container = styled("div")<
+  EmotionProps<HTMLDivElement> & {
+    outline?: boolean;
+    type?: "text" | "number" | "tel" | "password";
+    fontsize?: number;
+    p?: number;
+    error?: boolean;
+  }
+>`
   position: relative;
   width: 100%;
   min-height: 1.7em;
-  border: 0.05em solid ${({ theme, outline, error  }) => outline ? error ? theme.colors.danger : theme.colors.border : "none"};
+  border: 0.05em solid
+    ${({ theme, outline, error }) =>
+      outline ? (error ? theme.colors.danger : theme.colors.border) : "none"};
   display: flex;
   align-items: center;
   padding-left: 0.5em;
@@ -18,7 +28,12 @@ const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolea
     border: 0.05em solid
       ${({ theme, outline }) => (outline ? theme.colors.white : "none")};
     outline: 2px solid
-      ${({ theme, outline, error }) => (outline ? error ? theme.colors.danger : theme.colors.button.normal : theme.colors.button.normal)};
+      ${({ theme, outline, error }) =>
+        outline
+          ? error
+            ? theme.colors.danger
+            : theme.colors.button.normal
+          : theme.colors.button.normal};
   }
   input[type="text"] {
     background-color: inherit;
@@ -30,8 +45,8 @@ const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolea
     font-weight: 300;
     color: ${({ theme }) => theme.typography.cardParam.color};
     box-sizing: border-box;
-    font-size: ${({ fontsize }) => fontsize ? `${fontsize}px` : "1em"};
-    padding: ${({p}) => p ? `${p}px` : 0};
+    font-size: ${({ fontsize }) => (fontsize ? `${fontsize}px` : "1em")};
+    padding: ${({ p }) => (p ? `${p}px` : 0)};
   }
   input[type="password"] {
     background-color: inherit;
@@ -43,8 +58,8 @@ const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolea
     font-weight: 300;
     color: ${({ theme }) => theme.typography.cardParam.color};
     box-sizing: border-box;
-    font-size: ${({ fontsize }) => fontsize ? `${fontsize}px` : "1em"};
-    padding: ${({p}) => p ? `${p}px` : 0};
+    font-size: ${({ fontsize }) => (fontsize ? `${fontsize}px` : "1em")};
+    padding: ${({ p }) => (p ? `${p}px` : 0)};
   }
   input[type="tel"] {
     background-color: inherit;
@@ -56,8 +71,8 @@ const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolea
     font-weight: 300;
     color: ${({ theme }) => theme.typography.cardParam.color};
     box-sizing: border-box;
-    font-size: ${({ fontsize }) => fontsize ? `${fontsize}px` : "1em"};
-    padding: ${({p}) => p ? `${p}px` : 0};
+    font-size: ${({ fontsize }) => (fontsize ? `${fontsize}px` : "1em")};
+    padding: ${({ p }) => (p ? `${p}px` : 0)};
   }
   input[type="number"] {
     background-color: inherit;
@@ -70,45 +85,71 @@ const Container = styled("div")<EmotionProps<HTMLDivElement> & {outline?: boolea
     color: ${({ theme }) => theme.typography.cardParam.color};
     text-align: center;
     box-sizing: border-box;
-    font-size: ${({ fontsize }) => fontsize ? `${fontsize}px` : "1em"};
-    padding: ${({p}) => p ? `${p}px` : 0};
+    font-size: ${({ fontsize }) => (fontsize ? `${fontsize}px` : "1em")};
+    padding: ${({ p }) => (p ? `${p}px` : 0)};
   }
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
-const Textbox: 
-  FC<EmotionProps<HTMLDivElement> & 
-  {outline?: boolean, type?: "text" | "number" | "tel" | "password", 
-  fontsize?: number,
-  placeholder?: string, maxLength?: number, 
-  value?: string | number, 
-  p?:number,
-  error?:boolean,
-  onChange?: (value: string | number) => void}> = 
-    ({ 
-      placeholder, 
-      value, 
-      outline, 
-      type, 
-      maxLength, 
-      fontsize,
-      p,
-      error,
-      onChange = () => null, 
-      ...props
-    }) => {
+const Textbox: FC<
+  EmotionProps<HTMLDivElement> & {
+    outline?: boolean;
+    type?: "text" | "number" | "tel" | "password";
+    fontsize?: number;
+    placeholder?: string;
+    maxLength?: number;
+    value?: string | number;
+    p?: number;
+    error?: boolean;
+    onChange?: (value: string | number) => void;
+  }
+> = ({
+  placeholder,
+  value,
+  outline,
+  type,
+  maxLength,
+  fontsize,
+  p,
+  error,
+  onChange = () => null,
+  ...props
+}) => {
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+  
+      const parentElement = event.target.parentElement;
+      console.log("Parent Element:", parentElement);
+  
+      const nextInput = parentElement.nextElementSibling?.querySelector("input");
+      console.log("Next Input:", nextInput);
+  
+      if (nextInput) {
+        nextInput.focus();
+      }
+    }
+  };
+
   return (
-    <Container error={error} p={p} fontsize={fontsize} outline={outline} type={type}>
-      <input 
-        type={type ? type : "text"} 
-        placeholder={placeholder} 
-        maxLength={200} 
-        value={value || ""}  
-        onChange={(event) => onChange(event.target.value)}  
+    <Container
+      error={error}
+      p={p}
+      fontsize={fontsize}
+      outline={outline}
+      type={type}
+    >
+      <input
+        type={type ? type : "text"}
+        placeholder={placeholder}
+        maxLength={200}
+        value={value || ""}
+        onChange={(event) => onChange(event.target.value)}
+        onKeyDown={handleKeyDown}
       />
     </Container>
   );

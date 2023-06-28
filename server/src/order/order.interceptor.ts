@@ -16,10 +16,6 @@ import { Readable } from 'stream';
 import * as moment from 'moment';
 import { OrderService } from './services/order.service';
 
-const ORDER_NUMBER = 'order_number';
-interface OrderData {
-  orderNumber: number;
-}
 
 @Injectable()
 export class OrderInterceptor implements NestInterceptor {
