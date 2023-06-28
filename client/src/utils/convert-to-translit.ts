@@ -27,13 +27,14 @@ export const convertToTranslit = (cyrillicText: string): string => {
     ч: "ch",
     ш: "sh",
     щ: "sch",
-    ъ: "",
+    ъ: "i",
+    ь: "i",
     ы: "y",
-    ь: "",
     э: "e",
     ю: "yu",
     я: "ya",
     " ": "-",
+    ",": "-",
   };
 
   return cyrillicText

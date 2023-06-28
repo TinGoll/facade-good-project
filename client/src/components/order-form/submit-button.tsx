@@ -133,6 +133,10 @@ function SubmitButton({ clearAllFields }: Props) {
     formData.append("facades", JSON.stringify(data.facades));
 
     data.files.forEach((file) => {
+      console.log(convertToTranslit(file.name));
+    });
+
+    data.files.forEach((file) => {
       return formData.append("files", file, convertToTranslit(file.name));
     });
 
