@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { AxiosError } from "axios";
 import moment from "moment";
+import { convertToTranslit } from "../../utils/convert-to-translit";
 
 const MySwal = withReactContent(Swal);
 
@@ -132,7 +133,7 @@ function SubmitButton({ clearAllFields }: Props) {
     formData.append("facades", JSON.stringify(data.facades));
 
     data.files.forEach((file) => {
-      return formData.append("files", file, file.name);
+      return formData.append("files", file, convertToTranslit(file.name));
     });
 
     $api

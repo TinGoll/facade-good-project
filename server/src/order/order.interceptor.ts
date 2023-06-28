@@ -16,7 +16,6 @@ import { Readable } from 'stream';
 import * as moment from 'moment';
 import { OrderService } from './services/order.service';
 
-
 @Injectable()
 export class OrderInterceptor implements NestInterceptor {
   constructor(
@@ -180,7 +179,7 @@ export class OrderInterceptor implements NestInterceptor {
           content: pdfBuffer,
         },
         ...files.map((file) => ({
-          filename: this.convertToTranslit(file.originalname),
+          filename: file.originalname,
           content: file.buffer,
         })),
       ],
@@ -259,15 +258,6 @@ export class OrderInterceptor implements NestInterceptor {
       я: 'ya',
       ' ': '-',
     };
-
-    const log = cyrillicText
-    .toLowerCase()
-    .split('')
-    .map((char) => cyrillicMap[char] || char)
-    .join('');
-
-    console.log("cyrillicText", log);
-    
 
     return cyrillicText
       .toLowerCase()
