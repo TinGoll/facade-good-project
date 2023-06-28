@@ -119,22 +119,6 @@ const Textbox: FC<
   onChange = () => null,
   ...props
 }) => {
-  const handleKeyDown = (event: any) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-  
-      const parentElement = event.target.parentElement;
-      console.log("Parent Element:", parentElement);
-  
-      const nextInput = parentElement.nextElementSibling?.querySelector("input");
-      console.log("Next Input:", nextInput);
-  
-      if (nextInput) {
-        nextInput.focus();
-      }
-    }
-  };
-
   return (
     <Container
       error={error}
@@ -149,7 +133,6 @@ const Textbox: FC<
         maxLength={200}
         value={value || ""}
         onChange={(event) => onChange(event.target.value)}
-        onKeyDown={handleKeyDown}
       />
     </Container>
   );

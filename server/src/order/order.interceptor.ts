@@ -61,8 +61,8 @@ export class OrderInterceptor implements NestInterceptor {
       service: 'gmail',
       port: Number(port),
       secure: true,
-      logger: true,
-      debug: true,
+      logger: false,
+      debug: false,
       secureConnection: false,
       auth: {
         user: user,
@@ -259,6 +259,15 @@ export class OrderInterceptor implements NestInterceptor {
       я: 'ya',
       ' ': '-',
     };
+
+    const log = cyrillicText
+    .toLowerCase()
+    .split('')
+    .map((char) => cyrillicMap[char] || char)
+    .join('');
+
+    console.log("cyrillicText", log);
+    
 
     return cyrillicText
       .toLowerCase()
