@@ -43,3 +43,4 @@ export const convertToTranslit = (cyrillicText: string): string => {
     .map((char) => cyrillicMap[char] || char)
     .join("");
 };
+

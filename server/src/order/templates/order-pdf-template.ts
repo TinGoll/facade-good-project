@@ -192,6 +192,7 @@ export const ORDER_PDF_TEMPLATE = `
           </div>
         </div>
       </div>
+      {{#if facades.length}}
       <div class="order_body">
       <div class="table-title">Фасады</div>
         <table class="order_table">
@@ -219,6 +220,7 @@ export const ORDER_PDF_TEMPLATE = `
           </tbody>
         </table>
       </div>
+      {{/if}}
       {{#if accessories.length}}
       <div>
       <div class="table-title">Комплектующие</div>

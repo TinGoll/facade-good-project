@@ -6,10 +6,47 @@ import { Box, EmotionProps } from "../facade-good/facade-good";
 import useOrderForm from "./use-order-form";
 import { Order } from "./order-form-provider";
 
+import ReactSelect from "react-select";
+import styled from "@emotion/styled";
+import { useTheme } from "@emotion/react";
+
+import "./select.css";
+
 const yesNoOptions: SelectOption[] = [
   { label: "Да", value: "Да" },
   { label: "Нет", value: "Нет" },
 ];
+
+const customStyles = {
+  option: (provided: any, state: any) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? "rgba(57, 76, 96, 0.04)" : "white",
+    color: "rgba(57, 76, 96, 1)",
+    ":hover": {
+      backgroundColor: "rgba(57, 76, 96, 0.04)",
+    },
+  }),
+  control: (baseStyles: any, state: any) => {
+    baseStyles["&:hover"] = {
+      borderColor: "none",
+    };
+    return {
+      ...baseStyles,
+      outline: state.isFocused
+        ? `2px solid #FFB421 !important`
+        : "0 !important",
+      borderColor: state.isFocused ? "hsl(0, 0%, 90%)" : "hsl(0, 0%, 80%)",
+      backgroundColor: state.isFocused ? "rgba(57, 76, 96, 0.02)" : "white",
+      height: "100%",
+    };
+  },
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    transform: "translate(0, 25%)",
+  }),
+};
+
+const customNoOptionsMessage = () => "Нет доступных вариантов";
 
 interface Props extends EmotionProps<HTMLDivElement> {
   children?: ReactNode;
@@ -84,6 +121,7 @@ const OrderFormHeader: FC<Props> = ({
           options={filtredModel}
           placeholder="Модель"
         />
+
         <Select
           value={state.header.color}
           onChange={(value) => updateHeader({ color: value })}
@@ -91,6 +129,28 @@ const OrderFormHeader: FC<Props> = ({
           options={colors}
           placeholder="Цвет"
         />
+
+        <ReactSelect
+          isSearchable
+          options={colors}
+          styles={customStyles}
+          noOptionsMessage={customNoOptionsMessage}
+          placeholder="Цвет"
+          components={{
+            DropdownIndicator: () => (
+              <Box
+                css={{
+                  translate: "0 25%",
+                  border: "0.25em solid transparent",
+                  borderTopColor: "#777",
+                  marginRight: "10px", // Отступ справа
+                  marginLeft: "10px", // Отступ слева
+                }}
+              />
+            ),
+          }}
+        />
+
         <Select
           value={state.header.glossiness}
           onChange={(value) => updateHeader({ glossiness: value })}
