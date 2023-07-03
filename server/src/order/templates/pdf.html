@@ -46,22 +46,24 @@
 
       .title {
         background-color: #f0ebef;
-
         font-size: 16px;
         font-weight: 500;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
+        align-items: stretch;
       }
       .title div {
         flex: 1;
         padding: 16px;
         text-align: center;
+        border-bottom: 1px solid #dedede;
+        border-top: 1px solid #dedede;
+        border-left: 1px solid #dedede;
       }
 
-      .title div:not(:last-child) {
-        border-right: 1px solid white;
+      .title div:last-child {
+        border-right: 1px solid #dedede;
       }
 
       .header {
@@ -123,6 +125,7 @@
 
       .th_num {
         width: 30px;
+        font-weight: 400;
       }
       .th_height {
         width: 60px;
@@ -147,6 +150,13 @@
 
       .txt_center {
         text-align: center;
+      }
+      .table-title {
+        text-align: center;
+        padding: 8px;
+        border: 1px solid #dedede;
+        font-weight: 500;
+        font-size: 1.1em;
       }
     </style>
   </head>
@@ -185,6 +195,7 @@
         </div>
       </div>
       <div class="order_body">
+        <div class="table-title">Фасады</div>
         <table class="order_table">
           <thead>
             <tr>
@@ -221,6 +232,7 @@
         </table>
       </div>
       <div>
+        <div class="table-title">Комплектующие</div>
         <table class="order_table">
           <thead>
             <th class="th_num">№</th>

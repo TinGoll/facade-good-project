@@ -13,142 +13,152 @@ export const ORDER_PDF_TEMPLATE = `
       rel="stylesheet"
     />
     <style>
-      body {
-        width: 100% !important;
-        -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
-        margin: 0;
-        padding: 0;
-        line-height: 100%;
-        font-family: 'Roboto';
-      }
+    body {
+      width: 100% !important;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+      margin: 0;
+      padding: 0;
+      line-height: 100%;
+      font-family: 'Roboto';
+    }
 
-      img {
-        outline: none;
-        text-decoration: none;
-        border: none;
-        -ms-interpolation-mode: bicubic;
-        max-width: 100% !important;
-        margin: 0;
-        padding: 0;
-        display: block;
-      }
+    img {
+      outline: none;
+      text-decoration: none;
+      border: none;
+      -ms-interpolation-mode: bicubic;
+      max-width: 100% !important;
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
 
-      .mail {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding: 20px;
-      }
+    .mail {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 20px;
+    }
 
-      .mail span {
-        color: black;
-      }
+    .mail span {
+      color: black;
+    }
 
-      .title {
-        background-color: #f0ebef;
+    .title {
+      background-color: #f0ebef;
+      font-size: 16px;
+      font-weight: 500;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+    }
+    .title div {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      border-bottom: 1px solid #dedede;
+      border-top: 1px solid #dedede;
+      border-left: 1px solid #dedede;
+    }
 
-        font-size: 16px;
-        font-weight: 500;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .title div {
-        flex: 1;
-        padding: 16px;
-        text-align: center;
-      }
+    .title div:last-child {
+      border-right: 1px solid #dedede;
+    }
 
-      .title div:not(:last-child) {
-        border-right: 1px solid white;
-      }
+    .header {
+    }
 
-      .header {
-      }
+    .header_row {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      border-top: 1px solid #dedede;
+      border-right: 1px solid #dedede;
+    }
 
-      .header_row {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        border-top: 1px solid #dedede;
-        border-right: 1px solid #dedede;
-      }
+    .header_row:last-child {
+      border-bottom: 1px solid #dedede;
+    }
 
-      .header_row:last-child {
-        border-bottom: 1px solid #dedede;
-      }
+    .header_row div {
+      flex: 1;
+      text-align: left;
+      padding: 8px;
+      padding-left: 24px;
+      color: grey;
+      border-left: 1px solid #dedede;
+    }
 
-      .header_row div {
-        flex: 1;
-        text-align: left;
-        padding: 8px;
-        padding-left: 24px;
-        color: grey;
-        border-left: 1px solid #dedede;
-      }
+    .header_row_solid .header_row div span {
+      font-weight: 500;
+      color: black;
+    }
 
-      .header_row_solid .header_row div span {
-        font-weight: 500;
-        color: black;
-      }
+    .order_body {
+    }
+    .order_table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-      .order_body {
-      }
-      .order_table {
-        width: 100%;
-        border-collapse: collapse;
-      }
+    .order_table thead tr {
+      background-color: #f0ebef;
+    }
+    .order_table thead tr th {
+      border: 1px solid #dedede;
+      padding: 8px;
+      font-size: 15px;
+    }
 
-      .order_table thead tr {
-        background-color: #f0ebef;
-      }
-      .order_table thead tr th {
-        border: 1px solid #dedede;
-        padding: 8px;
-        font-size: 15px;
-      }
+    .order_table tbody tr {
+      border-left: 1px solid #dedede;
+      border-bottom: 1px solid #dedede;
+    }
 
-      .order_table tbody tr {
-        border-left: 1px solid #dedede;
-        border-bottom: 1px solid #dedede;
-      }
+    .order_table tbody td {
+      padding: 6px;
+      font-size: 15px;
+      border-right: 1px solid #dedede;
+    }
 
-      .order_table tbody td {
-        padding: 6px;
-        font-size: 15px;
-        border-right: 1px solid #dedede;
-      }
+    .th_num {
+      width: 30px;
+      font-weight: 400;
+    }
+    .th_height {
+      width: 60px;
+    }
+    .th_width {
+      width: 60px;
+    }
+    .th_amount {
+      width: 55px;
+    }
+    .th_type {
+      width: 100px;
+    }
 
-      .th_num {
-        width: 30px;
-      }
-      .th_height {
-        width: 60px;
-      }
-      .th_width {
-        width: 60px;
-      }
-      .th_amount {
-        width: 55px;
-      }
-      .th_type {
-        width: 100px;
-      }
+    .th_model {
+      width: 130px;
+    }
 
-      .th_model {
-        width: 130px;
-      }
+    .txt_left {
+      text-align: left;
+    }
 
-      .txt_left {
-        text-align: left;
-      }
-
-      .txt_center {
-        text-align: center;
-      }
+    .txt_center {
+      text-align: center;
+    }
+    .table-title {
+      text-align: center;
+      padding: 8px;
+      border: 1px solid #dedede;
+      font-weight: 500;
+      font-size: 1.1em;
+    }
     </style>
   </head>
   <body>
@@ -183,6 +193,7 @@ export const ORDER_PDF_TEMPLATE = `
         </div>
       </div>
       <div class="order_body">
+      <div class="table-title">Фасады</div>
         <table class="order_table">
           <thead>
             <tr>
@@ -210,6 +221,7 @@ export const ORDER_PDF_TEMPLATE = `
       </div>
       {{#if accessories.length}}
       <div>
+      <div class="table-title">Комплектующие</div>
         <table class="order_table">
           <thead>
             <th class="th_num">№</th>
