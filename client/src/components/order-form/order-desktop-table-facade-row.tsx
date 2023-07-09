@@ -1,11 +1,47 @@
 import React, { FC, useState } from "react";
 import { Row, Td } from "../facade-good/form-components/table";
-import Select, { SelectOption } from "../facade-good/form-components/select";
+import { SelectOption } from "../facade-good/form-components/select";
 import Textbox from "../facade-good/form-components/textbox";
 import styled from "@emotion/styled";
-import { EmotionProps } from "../facade-good/facade-good";
+import { Box, EmotionProps } from "../facade-good/facade-good";
 import { Order } from "./order-form-provider";
 import useDebounce from "../facade-good/hooks/use-debounce";
+
+import ReactSelect from "react-select";
+
+const customNoOptionsMessage = () => "Пусто";
+
+const customStyles = {
+  option: (provided: any, state: any) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? "rgba(57, 76, 96, 0.04)" : "white",
+    color: "rgba(57, 76, 96, 1)",
+    ":hover": {
+      backgroundColor: "rgba(57, 76, 96, 0.04)",
+    },
+  }),
+  control: (baseStyles: any, state: any) => {
+    baseStyles["&:hover"] = {
+      borderColor: "none",
+    };
+    return {
+      ...baseStyles,
+      outline: state.isFocused
+        ? `2px solid #FFB421 !important`
+        : "0 !important",
+      border: "none",
+      // borderColor: state.isFocused ? "hsl(0, 0%, 90%)" : "hsl(0, 0%, 80%)",
+      backgroundColor: state.isFocused ? "rgba(57, 76, 96, 0.02)" : "white",
+      minHeight: 27.5,
+      height: "100%",
+      textAlign: "center",
+    };
+  },
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    transform: "translate(0, 25%)",
+  }),
+};
 
 const Button = styled("button")<EmotionProps<HTMLButtonElement>>`
   background: none;
@@ -91,11 +127,32 @@ const OrderDesktopTableFacadeRow: FC<Props> = ({
         />
       </Td>
       <Td>
-        <Select
+        {/* <Select
           py={0.3}
           options={facadeType}
           value={value?.type}
           onChange={(v) => handleChange({ type: v })}
+        /> */}
+        <ReactSelect
+          noOptionsMessage={customNoOptionsMessage}
+          placeholder=""
+          styles={customStyles}
+          options={facadeType}
+          value={value?.type}
+          onChange={(v: any) => handleChange({ type: v })}
+          components={{
+            DropdownIndicator: () => (
+              <Box
+                css={{
+                  translate: "0 25%",
+                  border: "0.25em solid transparent",
+                  borderTopColor: "#777",
+                  marginRight: "10px", // Отступ справа
+                  marginLeft: "10px", // Отступ слева
+                }}
+              />
+            ),
+          }}
         />
       </Td>
       <Td>

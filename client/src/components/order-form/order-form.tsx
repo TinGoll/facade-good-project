@@ -189,14 +189,23 @@ const OrderForm = () => {
       </OrderBlockWrapper>
       <OrderBlockWrapper
         header={
-          <Typography
-            css={(theme: FacadeGood.CustomTheme) => ({
-              ...theme.typography.cardPrice,
-              textAlign: "center",
-            })}
-          >
-            Фасады
-          </Typography>
+          <React.Fragment>
+            <Typography
+              css={(theme: FacadeGood.CustomTheme) => ({
+                ...theme.typography.cardPrice,
+                textAlign: "center",
+              })}
+            >
+              Фасады
+            </Typography>
+            <Typography css={{ fontSize: 14, textAlign: "center", marginTop: 8, "& span": {
+              color: "#394C60",
+              fontWeight: 500,
+              
+            } }}>
+              Для перемещения по таблице используйте клавишу <span>Tab</span>
+            </Typography>
+          </React.Fragment>
         }
       >
         <FacadeTable facadeType={facadeTypes} />

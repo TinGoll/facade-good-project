@@ -15,7 +15,7 @@ const TBody = styled("tbody")<EmotionProps<HTMLTableElement>>`
     border-top: 1px solid ${({ theme }) => theme.colors.border};
   }
   & tr:hover {
-    background-color: rgba(57, 76, 96, 0.05);
+    background-color: rgba(57, 76, 96, 0.02);
   }
 `;
 const Row = styled("tr")<EmotionProps<HTMLTableElement>>`

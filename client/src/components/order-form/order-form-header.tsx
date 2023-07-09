@@ -1,14 +1,11 @@
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import { Grid } from "../facade-good/form-components/grid";
-import { FacadeGood } from "../../app-types";
 import Select, { SelectOption } from "../facade-good/form-components/select";
 import { Box, EmotionProps } from "../facade-good/facade-good";
 import useOrderForm from "./use-order-form";
 import { Order } from "./order-form-provider";
 
 import ReactSelect from "react-select";
-import styled from "@emotion/styled";
-import { useTheme } from "@emotion/react";
 
 import "./select.css";
 
@@ -16,6 +13,13 @@ const yesNoOptions: SelectOption[] = [
   { label: "Да", value: "Да" },
   { label: "Нет", value: "Нет" },
 ];
+
+const formatOptionLabel = ({ label, value }: { label: string; value: any }) => (
+  <div>
+    <span>{label}: </span>
+    <span>{value}</span>
+  </div>
+);
 
 const customStyles = {
   option: (provided: any, state: any) => ({
@@ -46,7 +50,17 @@ const customStyles = {
   }),
 };
 
-const customNoOptionsMessage = () => "Нет доступных вариантов";
+const Arrow = () => (
+  <Box
+    css={{
+      translate: "0 25%",
+      border: "0.25em solid transparent",
+      borderTopColor: "#777",
+      marginRight: "10px", // Отступ справа
+      marginLeft: "10px", // Отступ слева
+    }}
+  />
+);
 
 interface Props extends EmotionProps<HTMLDivElement> {
   children?: ReactNode;
@@ -107,87 +121,161 @@ const OrderFormHeader: FC<Props> = ({
   return (
     <Box {...props}>
       <Grid columns={3} gap={16}>
-        <Select
+        <ReactSelect
+          options={massiv}
+          placeholder="Материал"
+          value={state.header.material}
+          onChange={(value: any) => updateHeader({ material: value })}
+          styles={customStyles}
+          isClearable
+          components={{
+            DropdownIndicator: Arrow,
+          }}
+          noOptionsMessage={() => "Список пуст"}
+        />
+
+        {/* <Select
           value={state.header.material}
           onChange={(value) => updateHeader({ material: value })}
           outline
           options={massiv}
           placeholder="Материал"
+        /> */}
+        <ReactSelect
+          options={filtredModel}
+          placeholder="Модель"
+          value={state.header.model}
+          onChange={(value: any) => updateHeader({ model: value })}
+          styles={customStyles}
+          isSearchable
+          isClearable
+          components={{
+            DropdownIndicator: Arrow,
+          }}
+          noOptionsMessage={() => "Выберите материал"}
         />
-        <Select
+        {/* <Select
           value={state.header.model}
           onChange={(value) => updateHeader({ model: value })}
           outline
           options={filtredModel}
           placeholder="Модель"
-        />
-
-        <Select
-          value={state.header.color}
-          onChange={(value) => updateHeader({ color: value })}
-          outline
+        /> */}
+        <ReactSelect
           options={colors}
           placeholder="Цвет"
+          value={state.header.color}
+          onChange={(e: any) => {
+            updateHeader({ color: e });
+          }}
+          styles={customStyles}
+          isSearchable
+          isClearable
+          components={{
+            DropdownIndicator: Arrow,
+          }}
+          noOptionsMessage={() => "Список пуст"}
         />
 
         <ReactSelect
-          isSearchable
-          options={colors}
+          options={glossiness}
+          placeholder="Блеск"
+          value={state.header.glossiness}
+          onChange={(value: any) => updateHeader({ glossiness: value })}
           styles={customStyles}
-          noOptionsMessage={customNoOptionsMessage}
-          placeholder="Цвет"
+          isClearable
           components={{
-            DropdownIndicator: () => (
-              <Box
-                css={{
-                  translate: "0 25%",
-                  border: "0.25em solid transparent",
-                  borderTopColor: "#777",
-                  marginRight: "10px", // Отступ справа
-                  marginLeft: "10px", // Отступ слева
-                }}
-              />
-            ),
+            DropdownIndicator: Arrow,
           }}
+          noOptionsMessage={() => "Список пуст"}
         />
 
-        <Select
+        {/* <Select
           value={state.header.glossiness}
           onChange={(value) => updateHeader({ glossiness: value })}
           outline
           options={glossiness}
           placeholder="Блеск"
+        /> */}
+        <ReactSelect
+          options={yesNoOptions}
+          placeholder="Присадка"
+          value={state.header.drill}
+          onChange={(value: any) => updateHeader({ drill: value })}
+          styles={customStyles}
+          isClearable
+          components={{
+            DropdownIndicator: Arrow,
+          }}
+          noOptionsMessage={() => "Список пуст"}
         />
-        <Select
+        {/* <Select
           value={state.header.drill}
           onChange={(value) => updateHeader({ drill: value })}
           outline
           options={yesNoOptions}
           placeholder="Присадка"
+        /> */}
+        <ReactSelect
+          options={patinas}
+          placeholder="Патина"
+          value={state.header.patina}
+          onChange={(value: any) => updateHeader({ patina: value })}
+          styles={customStyles}
+          isSearchable
+          isClearable
+          components={{
+            DropdownIndicator: Arrow,
+          }}
+          noOptionsMessage={() => "Список пуст"}
         />
-        <Select
+        {/* <Select
           value={state.header.patina}
           onChange={(value) => updateHeader({ patina: value })}
           outline
           options={patinas}
           placeholder="Патина"
-        />
+        /> */}
         {enabled && (
           <React.Fragment>
-            <Select
+            <ReactSelect
+              options={yesNoOptions}
+              placeholder="Термошов"
+              value={state.header.thermalseam}
+              onChange={(value: any) => updateHeader({ thermalseam: value })}
+              styles={customStyles}
+              isClearable
+              components={{
+                DropdownIndicator: Arrow,
+              }}
+              noOptionsMessage={() => "Список пуст"}
+            />
+            {/* <Select
               value={state.header.thermalseam}
               onChange={(value) => updateHeader({ thermalseam: value })}
               outline
               options={yesNoOptions}
               placeholder="Термошов"
+            /> */}
+            <ReactSelect
+              options={yesNoOptions}
+              placeholder="Накат"
+              value={state.header.roll}
+              onChange={(value: any) => updateHeader({ roll: value })}
+              styles={customStyles}
+              isClearable
+              components={{
+                DropdownIndicator: Arrow,
+              }}
+              noOptionsMessage={() => "Список пуст"}
             />
-            <Select
+            {/* <Select
               value={state.header.roll}
               onChange={(value) => updateHeader({ roll: value })}
               outline
               options={yesNoOptions}
               placeholder="Накат"
-            />
+            /> */}
           </React.Fragment>
         )}
       </Grid>
