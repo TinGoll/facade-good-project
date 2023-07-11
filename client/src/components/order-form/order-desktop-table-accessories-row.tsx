@@ -87,6 +87,7 @@ const OrderDesktopTableAccessoriesRow: FC<Props> = ({
   onChange,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [invalid, setInvalid] = useState<boolean>(false);
 
   const [value, setValue] = useState<Order.Accessorie>(item);
   const [typing, setTyping] = useState(false);
@@ -103,6 +104,14 @@ const OrderDesktopTableAccessoriesRow: FC<Props> = ({
   const handleClick = () => {
     // setIsFocused((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (value.type?.value && !value.amount) {
+      setInvalid(true);
+    } else {
+      setInvalid(false);
+    }
+  }, [value]);
 
   useEffect(() => {
     if (accessorieModel.length && accessorieType.length && value.type) {
@@ -187,7 +196,11 @@ const OrderDesktopTableAccessoriesRow: FC<Props> = ({
           value={value?.height}
         />
       </Td>
-      <Td>
+      <Td
+        css={{
+          backgroundColor: invalid ? `rgba(220, 20, 60, 0.07)` : "inherit",
+        }}
+      >
         <Textbox
           type="number"
           onChange={(v) => handleChange({ amount: Number(v) })}

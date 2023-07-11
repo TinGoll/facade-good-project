@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Row, Td } from "../facade-good/form-components/table";
 import { SelectOption } from "../facade-good/form-components/select";
 import Textbox from "../facade-good/form-components/textbox";
@@ -72,6 +72,7 @@ const OrderDesktopTableFacadeRow: FC<Props> = ({
   onDelete,
   onChange,
 }) => {
+  const [invalid, setInvalid] = useState<boolean>(false);
   const [value, setValue] = useState<Order.Facade>(item);
   const [typing, setTyping] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -84,6 +85,14 @@ const OrderDesktopTableFacadeRow: FC<Props> = ({
     setTyping(true);
     setValue((prev) => ({ ...prev, ...data }));
   };
+
+  useEffect(() => {
+    if (value.type?.value && !value.amount) {
+      setInvalid(true);
+    } else {
+      setInvalid(false);
+    }
+  }, [value]);
 
   useDebounce(
     () => {
@@ -118,7 +127,11 @@ const OrderDesktopTableFacadeRow: FC<Props> = ({
         />
       </Td>
       <Td>-</Td>
-      <Td>
+      <Td
+        css={{
+          backgroundColor: invalid ? `rgba(220, 20, 60, 0.07)` : "inherit",
+        }}
+      >
         <Textbox
           type="number"
           maxLength={4}
