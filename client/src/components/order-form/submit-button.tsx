@@ -85,6 +85,35 @@ function SubmitButton({ clearAllFields }: Props) {
       }
     }
 
+    for (const facade of state.facades || []) {
+      if ((facade.height || facade.type?.value) && !facade.amount) {
+        tempError = `В одной из позиций, не указано количество.`;
+        break;
+      }
+    }
+    for (const accessorie of state.accessories || []) {
+      if ((accessorie.height || accessorie.type?.value) && !accessorie.amount) {
+        tempError = `В одной из позиций, не указано количество.`;
+        break;
+      }
+    }
+
+    const headerFullness =
+      state.header.material?.value &&
+      state.header.model?.value &&
+      state.header.color?.value &&
+      state.header.glossiness?.value &&
+      state.header.drill?.value &&
+      state.header.patina?.value;
+
+    const headerExtraFullness =
+      state.header.material?.type !== "Массив" ||
+      (state.header.thermalseam?.value && state.header.roll?.value);
+
+    if (!headerFullness || !headerExtraFullness) {
+      tempError = `Все поля шапки заказа являются обязательными`;
+    }
+
     setError(tempError);
   }, [state]);
 
