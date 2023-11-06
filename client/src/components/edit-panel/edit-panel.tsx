@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { Box, EmotionProps } from "../facade-good/facade-good";
 import CloseIcon from "../../assets/icons/CloseIcon";
 import OkIcon from "../../assets/icons/OkIcon";
-import EditIcon from "../../assets/icons/EditIcon copy";
+import EditIcon from "../../assets/icons/EditIcon";
 import DeleteIcon from "../../assets/icons/DeleteIcon";
 
 const Container = styled(Box)(() => {
