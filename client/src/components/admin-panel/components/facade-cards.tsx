@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import {
   GALLERY_GET_ALL,
   GalleryImages,
@@ -26,6 +26,7 @@ import {
   EmotionProps,
   PrimaryButton,
   Divider,
+  Button,
 } from "../../facade-good/facade-good";
 import styled from "@emotion/styled";
 import { Form } from "../../facade-good/form-components/form";
@@ -35,6 +36,8 @@ import { FacadeGood } from "../../../app-types";
 import Select from "react-select";
 import { FileWithPath } from "react-dropzone";
 import $api from "../../../http";
+import SortedCards from "./sorted-cards";
+import { compareArrays } from "../../../utils/compareArrays";
 
 interface ItemResponce {
   title: string;
@@ -48,6 +51,24 @@ interface ItemResponce {
   createdAt: string;
   updatedAt: string;
 }
+
+const SortedBatton = styled(Button)(({ theme }) => ({
+  padding: 6,
+  border: "none",
+  cursor: "pointer",
+  borderRadius: 6,
+  background: theme.colors.button.normal,
+  ":hover": {
+    background: theme.colors.button.hover,
+  },
+  ":active": {
+    background: theme.colors.button.active,
+  },
+  ":disabled": {
+    background: theme.colors.bg3,
+    cursor: "not-allowed",
+  },
+}));
 
 const DeleteButton = styled("button")<EmotionProps<HTMLButtonElement>>`
   position: absolute;
@@ -117,6 +138,7 @@ const FacadeCards: FC<Props> = ({
   setLoading,
   setToken,
 }) => {
+  const [sorted, setSorted] = useState<boolean>(false);
   const [items, setItems] = useState<GalleryImages.Item[]>([]);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
@@ -127,12 +149,11 @@ const FacadeCards: FC<Props> = ({
   const [image2, setImage2] = useState<FileWithPath[]>([]);
 
   const [refreshCard, setRefreshCard] = useState(true);
-  const [getData, { data, loading, error }] = useLazyQuery<GalleryImages.Root>(
-    GALLERY_GET_ALL,
-    {
+
+  const [getData, { data, loading: dataLoading }] =
+    useLazyQuery<GalleryImages.Root>(GALLERY_GET_ALL, {
       fetchPolicy: "no-cache",
-    }
-  );
+    });
 
   useEffect(() => {
     if (refreshCard) {
@@ -142,13 +163,15 @@ const FacadeCards: FC<Props> = ({
   }, [refreshCard]);
 
   useEffect(() => {
-    if (!loading) {
+    if (!dataLoading) {
       if (data) {
-        const { findAll: arr = [] } = data;
-        setItems([...arr].filter((d) => d.category !== "Галерея"));
+        const { findAll = [] } = data;
+        const arr = [...findAll];
+        arr.sort((a, b) => a.index - b.index);
+        setItems(arr.filter((d) => d.category !== "Галерея"));
       }
     }
-  }, [loading, data]);
+  }, [dataLoading, data]);
 
   function deleteHandler(id: string): void {
     setDeleteLoading(true);
@@ -179,6 +202,17 @@ const FacadeCards: FC<Props> = ({
     setCardType(null);
     setImage1([]);
     setImage2([]);
+  }
+
+  function updateItem(item: Partial<GalleryImages.Item> & { id: string }) {
+    return (
+      $api.put<ItemResponce>("gallery/items", { ...item }),
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -253,6 +287,34 @@ const FacadeCards: FC<Props> = ({
       });
   }
 
+  const ReorderHandler = (array: GalleryImages.Item[]) => {
+    const sorderItems = array.map<GalleryImages.Item>((item, index) => ({
+      ...item,
+      index: index,
+    }));
+    const reorderArray = compareArrays<GalleryImages.Item>(
+      items,
+      sorderItems,
+      (i) => Number(i.id),
+      (i) => Number(i.index)
+    );
+
+    const responcePromises = reorderArray.map(({ id, index }) =>
+      updateItem({ id, index })
+    );
+
+    Promise.all(responcePromises)
+      .then((responces) => responces)
+      .catch((err) => err)
+      .finally(() => {
+        setLoading(false);
+        setRefreshCard(true);
+      });
+    setLoading(true);
+  };
+
+  const isLoading = dataLoading;
+
   return (
     <Box css={{}}>
       <Form onSubmit={submitHandler}>
@@ -289,6 +351,7 @@ const FacadeCards: FC<Props> = ({
           <PrimaryButton css={{ height: 42 }}>Добавить</PrimaryButton>
         </Box>
       </Form>
+
       <Box
         css={(theme: FacadeGood.CustomTheme) => ({
           display: "flex",
@@ -319,84 +382,115 @@ const FacadeCards: FC<Props> = ({
         </Box>
       </Box>
       <Divider />
-      <CatalogImageGrid>
-        {items.map((item) => {
-          const images = [
-            ...(item?.images?.filter((i) => i.index === 0) || []),
-          ].sort((a, b) => Number(b.id) - Number(a.id));
-          const scheme = [
-            ...(item?.images?.filter((i) => i.index === 1) || []),
-          ].sort((a, b) => Number(b.id) - Number(a.id));
-          return (
-            <CatalogImageWrapper key={item.id}>
-              <DeletedBox
-                loading={deleteLoading}
-                deleteHandler={() => deleteHandler(item.id)}
-              >
-                <Card
-                  css={{
-                    ":hover": {
-                      boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.06)",
-                    },
-                  }}
-                >
-                  <CardTitle>{`${item.title}`}</CardTitle>
-                  <CardImgBox>
-                    {images.length && (
-                      <img
-                        className="SwiperImg"
-                        src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
-                        alt={item.title}
-                      />
-                    )}
-                  </CardImgBox>
 
-                  {scheme.length ? (
-                    <CardSchemeBox css={{ marginTop: 10 }} schemeheight={60}>
-                      <img
-                        className="SwiperImg"
-                        src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
-                        alt={item.title}
-                      />
-                    </CardSchemeBox>
-                  ) : (
-                    <CardSchemeBox
-                      css={{ marginTop: 10 }}
-                      schemeheight={60}
-                    ></CardSchemeBox>
-                  )}
-                  <CardFooter>
-                    <Box
-                      css={{
-                        flexGrow: 1,
-                        paddingLeft: 20,
-                      }}
-                    >
-                      <Typography
+      <Box
+        css={{
+          padding: "8px 16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+        }}
+      >
+        <SortedBatton
+          hidden={sorted}
+          disabled={sorted}
+          onClick={() => setSorted(true)}
+        >
+          Сортировать
+        </SortedBatton>
+      </Box>
+
+      {!isLoading && sorted && items.length && (
+        <SortedCards
+          cards={items}
+          setSorted={setSorted}
+          sorted={sorted}
+          onReorder={ReorderHandler}
+        />
+      )}
+      {!isLoading && !sorted && (
+        <CatalogImageGrid>
+          {items.map((item) => {
+            const images = [
+              ...(item?.images?.filter((i) => i.index === 0) || []),
+            ].sort((a, b) => Number(b.id) - Number(a.id));
+            const scheme = [
+              ...(item?.images?.filter((i) => i.index === 1) || []),
+            ].sort((a, b) => Number(b.id) - Number(a.id));
+            return (
+              <CatalogImageWrapper key={item.id}>
+                <DeletedBox
+                  loading={deleteLoading}
+                  deleteHandler={() => deleteHandler(item.id)}
+                >
+                  <Card
+                    css={{
+                      ":hover": {
+                        boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.06)",
+                      },
+                    }}
+                  >
+                    <CardTitle>{`${item.title}`}</CardTitle>
+
+                    <CardImgBox>
+                      {images.length && (
+                        <img
+                          className="SwiperImg"
+                          src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
+                          alt={item.title}
+                        />
+                      )}
+                    </CardImgBox>
+
+                    {scheme.length ? (
+                      <CardSchemeBox css={{ marginTop: 10 }} schemeheight={60}>
+                        <img
+                          className="SwiperImg"
+                          src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
+                          alt={item.title}
+                        />
+                      </CardSchemeBox>
+                    ) : (
+                      <CardSchemeBox
+                        css={{ marginTop: 10 }}
+                        schemeheight={60}
+                      ></CardSchemeBox>
+                    )}
+                    <CardFooter>
+                      <Box
                         css={{
-                          fontWeight: 400,
-                          color: theme.colors.cardTextSecondary,
+                          flexGrow: 1,
+                          paddingLeft: 20,
                         }}
-                      >{`Материал: ${
-                        getSubtitle(item.subtitle)[0]
-                      }`}</Typography>
-                      {getSubtitle(item.subtitle)[1] && (
+                      >
                         <Typography
                           css={{
                             fontWeight: 400,
                             color: theme.colors.cardTextSecondary,
                           }}
-                        >{`(${getSubtitle(item.subtitle)[1]})`}</Typography>
-                      )}
-                    </Box>
-                    <CardPrice>{item.params ? `${item.params}` : ""}</CardPrice>
-                  </CardFooter>
-                </Card>
-              </DeletedBox>
-            </CatalogImageWrapper>
-          );
-        })}
-      </CatalogImageGrid>
+                        >{`Материал: ${
+                          getSubtitle(item.subtitle)[0]
+                        }`}</Typography>
+                        {getSubtitle(item.subtitle)[1] && (
+                          <Typography
+                            css={{
+                              fontWeight: 400,
+                              color: theme.colors.cardTextSecondary,
+                            }}
+                          >{`(${getSubtitle(item.subtitle)[1]})`}</Typography>
+                        )}
+                      </Box>
+                      <CardPrice>
+                        {item.params ? `${item.params}` : ""}
+                      </CardPrice>
+                    </CardFooter>
+                  </Card>
+                </DeletedBox>
+              </CatalogImageWrapper>
+            );
+          })}
+        </CatalogImageGrid>
+      )}
     </Box>
   );
 };

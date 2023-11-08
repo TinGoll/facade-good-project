@@ -3,9 +3,6 @@ import * as React from "react";
 function DeleteIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      stroke="currentColor"
-      fill="currentColor"
-      stroke-width="0"
       viewBox="0 0 24 24"
       height="1em"
       width="1em"
