@@ -18,6 +18,9 @@ declare module FacadeGood {
     danger: string;
     error: string;
     info: string;
+    success: string;
+    link: string;
+    grey: string;
     white: string;
     black: string;
     button: Button;

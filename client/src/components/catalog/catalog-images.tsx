@@ -45,8 +45,10 @@ const CatalogImages: React.FC<CatalogImageProps> = ({
   React.useEffect(() => {
     if (!loading) {
       if (data) {
-        const { findAll: arr = [] } = data;
-        setItems([...arr]);
+        const { findAll = [] } = data;
+        const arr = [...findAll];
+        arr.sort((a, b) => a.index - b.index);
+        setItems(arr);
       }
     }
   }, [loading, data]);
