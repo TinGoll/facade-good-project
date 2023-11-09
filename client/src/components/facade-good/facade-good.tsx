@@ -347,6 +347,8 @@ export const CardTitle = ({
         {
           textAlign: "left",
           marginBottom: 10,
+          maxHeight: 42,
+          lineHeight: '0.9em',
           ...theme.typography.cardName,
         },
         ...(Array.isArray(props.css) ? props.css : [props.css]),
@@ -359,8 +361,9 @@ export const CardTitle = ({
 };
 
 export const CardImgBox = styled(Box)(({ theme }) => ({
+  position: "relative",
   width: "100%",
-  height: 460,
+  height: 456,
   borderRadius: "5px",
   background: theme.colors.white,
   overflow: "hidden",
@@ -368,6 +371,7 @@ export const CardImgBox = styled(Box)(({ theme }) => ({
 
 export const CardSchemeBox = styled(Box)<{ schemeheight?: number }>(
   ({ theme, schemeheight = 100 }) => ({
+    // position: 'relative',
     width: "100%",
     height: schemeheight,
     borderRadius: "5px",

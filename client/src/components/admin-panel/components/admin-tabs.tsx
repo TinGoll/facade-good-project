@@ -43,6 +43,7 @@ interface Props {
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setError: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loading?: boolean;
 }
 
 const AdminTabs: FC<Props> = ({
@@ -51,6 +52,7 @@ const AdminTabs: FC<Props> = ({
   setRefresh,
   setToken,
   setLoading,
+  loading,
   tab,
   token,
 }) => {
@@ -141,6 +143,7 @@ const AdminTabs: FC<Props> = ({
           setToken={setToken}
           setLoading={setLoading}
           token={token}
+          loading={loading}
         />
       );
 

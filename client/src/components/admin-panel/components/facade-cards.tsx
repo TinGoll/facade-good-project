@@ -1,29 +1,15 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   GALLERY_GET_ALL,
   GalleryImages,
 } from "../../../gatsby-plugin-apollo/queries/gallery.query";
 import { useLazyQuery } from "@apollo/client";
 import {
-  GATSBY_API_HOST,
-  GATSBY_API_PORT,
-} from "../../../settings/api.settings";
-import theme from "../../../theme";
-import { getSubtitle } from "../../../utils/get-subtitle";
-import {
   CatalogImageGrid,
   CatalogImageWrapper,
 } from "../../catalog/catalog-image-grid";
 import {
-  Card,
-  CardTitle,
-  CardImgBox,
-  CardSchemeBox,
-  CardFooter,
-  Typography,
-  CardPrice,
   Box,
-  EmotionProps,
   PrimaryButton,
   Divider,
   Button,
@@ -38,6 +24,8 @@ import { FileWithPath } from "react-dropzone";
 import $api from "../../../http";
 import SortedCards from "./sorted-cards";
 import { compareArrays } from "../../../utils/compareArrays";
+import ProductCard from "../../card/product-card";
+import { Hdbk } from "../../order-form/hdbk-types";
 
 interface ItemResponce {
   title: string;
@@ -70,70 +58,30 @@ const SortedBatton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const DeleteButton = styled("button")<EmotionProps<HTMLButtonElement>>`
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 99;
-  background-color: inherit;
-  width: 36px;
-  height: 36px;
-  font-size: 1.5em;
-  border: 2px solid ${({ theme }) => theme.colors.border};
-  border-radius: 50%;
-  color: ${({ theme }) => theme.colors.bg2};
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.bg3};
-    color: white;
-  }
-`;
-
-function DeletedBox({
-  children,
-  css,
-  loading,
-  deleteHandler,
-  ...props
-}: EmotionProps<HTMLDivElement> & {
-  deleteHandler: () => void;
-  loading: boolean;
-}) {
-  return (
-    <Box
-      {...props}
-      css={[
-        {
-          position: "relative",
-        },
-        ...(Array.isArray(css) ? css : [css]),
-      ]}
-    >
-      <DeleteButton disabled={loading} onClick={() => deleteHandler()}>
-        &times;
-      </DeleteButton>
-      {children}
-    </Box>
-  );
-}
-
 const types = [
   { value: "МДФ", label: "МДФ" },
   { value: "Массив", label: "Массив" },
   { value: "Комплектующие", label: "Комплектующие" },
 ];
 
+interface Files {
+  image?: FileWithPath[];
+  scheme?: FileWithPath[];
+}
+
 interface Props {
-  data: any;
   setToken: React.Dispatch<React.SetStateAction<string | null>>;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setError: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   token: string | null;
+  loading?: boolean;
+  data: Hdbk.Data | null;
 }
 
 const FacadeCards: FC<Props> = ({
   token,
-  data: hdbkData,
+  loading,
   setError,
   setLoading,
   setToken,
@@ -205,14 +153,25 @@ const FacadeCards: FC<Props> = ({
   }
 
   function updateItem(item: Partial<GalleryImages.Item> & { id: string }) {
-    return (
-      $api.put<ItemResponce>("gallery/items", { ...item }),
+    const { images, __typename, ...updateData } = item;
+
+    return $api.put<ItemResponce>(
+      "gallery/items",
+      { ...updateData },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
+  }
+
+  function addImage(id: string, formData: FormData) {
+    return $api.post("gallery/images/" + id, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -287,7 +246,7 @@ const FacadeCards: FC<Props> = ({
       });
   }
 
-  const ReorderHandler = (array: GalleryImages.Item[]) => {
+  const reorderHandler = (array: GalleryImages.Item[]) => {
     const sorderItems = array.map<GalleryImages.Item>((item, index) => ({
       ...item,
       index: index,
@@ -313,7 +272,34 @@ const FacadeCards: FC<Props> = ({
     setLoading(true);
   };
 
-  const isLoading = dataLoading;
+  const updateHandler = async (item: GalleryImages.Item, files: Files) => {
+    setLoading(true);
+    try {
+      await updateItem(item);
+
+      if (files.image?.length) {
+        const formData = new FormData();
+        const image = files.image[0];
+        formData.append("index", String(0));
+        formData.append("images", image, image.name);
+        await addImage(item.id, formData);
+      }
+      if (files.scheme?.length) {
+        const formData = new FormData();
+        const image = files.scheme[0];
+        formData.append("index", String(1));
+        formData.append("images", image, image.name);
+        await addImage(item.id, formData);
+      }
+      setRefreshCard(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isLoading = dataLoading || deleteLoading || loading;
 
   return (
     <Box css={{}}>
@@ -405,90 +391,24 @@ const FacadeCards: FC<Props> = ({
           cards={items}
           setSorted={setSorted}
           sorted={sorted}
-          onReorder={ReorderHandler}
+          onReorder={reorderHandler}
         />
       )}
+      {/* Карточки */}
       {!isLoading && !sorted && (
         <CatalogImageGrid>
-          {items.map((item) => {
-            const images = [
-              ...(item?.images?.filter((i) => i.index === 0) || []),
-            ].sort((a, b) => Number(b.id) - Number(a.id));
-            const scheme = [
-              ...(item?.images?.filter((i) => i.index === 1) || []),
-            ].sort((a, b) => Number(b.id) - Number(a.id));
-            return (
-              <CatalogImageWrapper key={item.id}>
-                <DeletedBox
-                  loading={deleteLoading}
-                  deleteHandler={() => deleteHandler(item.id)}
-                >
-                  <Card
-                    css={{
-                      ":hover": {
-                        boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.06)",
-                      },
-                    }}
-                  >
-                    <CardTitle>{`${item.title}`}</CardTitle>
-
-                    <CardImgBox>
-                      {images.length && (
-                        <img
-                          className="SwiperImg"
-                          src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
-                          alt={item.title}
-                        />
-                      )}
-                    </CardImgBox>
-
-                    {scheme.length ? (
-                      <CardSchemeBox css={{ marginTop: 10 }} schemeheight={60}>
-                        <img
-                          className="SwiperImg"
-                          src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
-                          alt={item.title}
-                        />
-                      </CardSchemeBox>
-                    ) : (
-                      <CardSchemeBox
-                        css={{ marginTop: 10 }}
-                        schemeheight={60}
-                      ></CardSchemeBox>
-                    )}
-                    <CardFooter>
-                      <Box
-                        css={{
-                          flexGrow: 1,
-                          paddingLeft: 20,
-                        }}
-                      >
-                        <Typography
-                          css={{
-                            fontWeight: 400,
-                            color: theme.colors.cardTextSecondary,
-                          }}
-                        >{`Материал: ${
-                          getSubtitle(item.subtitle)[0]
-                        }`}</Typography>
-                        {getSubtitle(item.subtitle)[1] && (
-                          <Typography
-                            css={{
-                              fontWeight: 400,
-                              color: theme.colors.cardTextSecondary,
-                            }}
-                          >{`(${getSubtitle(item.subtitle)[1]})`}</Typography>
-                        )}
-                      </Box>
-                      <CardPrice>
-                        {item.params ? `${item.params}` : ""}
-                      </CardPrice>
-                    </CardFooter>
-                  </Card>
-                </DeletedBox>
-              </CatalogImageWrapper>
-            );
-          })}
+          {items.map((item) => (
+            <CatalogImageWrapper key={item.id}>
+              <ProductCard
+                item={item}
+                title="Фасад"
+                editable
+                onDelete={deleteHandler}
+                onEdit={updateHandler}
+                loading={isLoading}
+              />
+            </CatalogImageWrapper>
+          ))}
         </CatalogImageGrid>
       )}
     </Box>

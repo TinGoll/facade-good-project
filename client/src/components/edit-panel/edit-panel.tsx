@@ -12,7 +12,6 @@ const Container = styled(Box)(() => {
     justifyContent: "flex-end",
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
   };
 });
 
@@ -25,8 +24,14 @@ const Button = styled("button")<EmotionProps<"button">>(({ theme }) => {
     borderRadius: "30%",
     lineHeight: 0,
     color: theme.colors.cardTextPrimary,
+    svg: {
+      fill: theme.colors.bg1,
+    },
     ":hover": {
       background: "#c8c8c8",
+      svg: {
+        fill: theme.colors.white,
+      },
     },
     ":active": {
       color: "#c86464",
@@ -34,6 +39,9 @@ const Button = styled("button")<EmotionProps<"button">>(({ theme }) => {
     ":disabled": {
       color: "#ccc",
       background: "none",
+      svg: {
+        fill: "#ccc",
+      },
     },
   };
 });
@@ -44,6 +52,7 @@ interface Props extends EmotionProps<HTMLDivElement> {
   onCancel?: () => void;
   setEditMode: (value: boolean) => void;
   editMode: boolean;
+  loading?: boolean;
 }
 
 const EditPanel: React.FC<Props> = ({
@@ -52,6 +61,7 @@ const EditPanel: React.FC<Props> = ({
   onCancel,
   setEditMode,
   editMode,
+  loading,
   ...props
 }) => {
   const handleConfirm = () => {
@@ -76,20 +86,24 @@ const EditPanel: React.FC<Props> = ({
 
   return (
     <Container {...props}>
-      <Button hidden={!editMode} onClick={handleConfirm}>
-        <OkIcon width={32} height={32} color="#00b400" />
+      <Button disabled={loading} hidden={!editMode} onClick={handleConfirm}>
+        <OkIcon width={28} height={28} color="#00b400" />
       </Button>
 
-      <Button hidden={!editMode} onClick={handleCancel}>
-        <CloseIcon width={32} height={32} color="#c80000" />
+      <Button disabled={loading} hidden={!editMode} onClick={handleCancel}>
+        <CloseIcon width={28} height={28} color="#c80000" />
       </Button>
 
-      <Button onClick={() => setEditMode(true)} hidden={editMode}>
-        <EditIcon width={32} height={32} />
+      <Button
+        disabled={loading}
+        onClick={() => setEditMode(true)}
+        hidden={editMode}
+      >
+        <EditIcon width={28} height={28} />
       </Button>
 
-      <Button disabled={editMode} onClick={handleDelete}>
-        <DeleteIcon width={32} height={32} />
+      <Button disabled={editMode || loading} onClick={handleDelete}>
+        <DeleteIcon width={28} height={28} />
       </Button>
     </Container>
   );

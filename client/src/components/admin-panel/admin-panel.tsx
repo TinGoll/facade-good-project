@@ -220,6 +220,7 @@ const AdminPanel = () => {
                 setError={setError}
                 setLoading={setLoading}
                 token={token}
+                loading={loading}
               />
             </BlockWrapper>
           </Box>

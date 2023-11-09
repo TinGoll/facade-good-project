@@ -19,7 +19,8 @@ const Container = styled(Box)`
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  background: rgba(256, 256, 256, 0.4);
+  background: rgba(256, 256, 256, 0.6);
+  backdrop-filter: blur(1px);
   flex: 1;
   width: 100%;
   font-size: 3em;

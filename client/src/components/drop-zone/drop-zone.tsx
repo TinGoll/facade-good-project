@@ -6,8 +6,6 @@ import DropZoneBground from "./drop-zone-bground";
 
 const Container = styled(Box)`
   position: relative;
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   height: 100%;
   background: "none";
   display: flex;

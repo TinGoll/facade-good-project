@@ -126,6 +126,7 @@ const Textbox: FC<
       fontsize={fontsize}
       outline={outline}
       type={type}
+      {...props}
     >
       <input
         type={type ? type : "text"}
