@@ -264,7 +264,7 @@ const MobileMenu: FC<MobileMenuProps> = memo(
                   background: "rgba(256,256,256,0.1)",
                 },
               }}
-              to={item.to}
+              to={`${item.to}#${item.hash}`}
             >
               {item.text}
             </FacadeGoodLink>
