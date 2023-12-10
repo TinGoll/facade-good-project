@@ -1,9 +1,6 @@
-import styled from "@emotion/styled";
-import { StaticImage } from "gatsby-plugin-image";
 import React, { FC } from "react";
 import theme from "../../theme";
 import {
-  Box,
   HeadText,
   HeadTextWrapper,
   PrimaryButton,
@@ -16,41 +13,9 @@ import {
 } from "../../gatsby-plugin-apollo/queries/gallery.query";
 import GalleryGrid from "./gallery-grid";
 import { navigate } from "gatsby";
+import { useImageModal } from "../../stores";
 
-const ImageGrid = styled(Box)((props) => ({
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-  [props.theme.mq.desktop]: {
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-  },
-  [props.theme.mq.largeDesktop]: {
-    gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))",
-  },
-  gridGap: "20px",
-  padding: "0 15px",
-  marginTop: 56,
-}));
-
-const ImageWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  padding-top: 100%; // this creates a 1:1 aspect ratio
-
-  & > * {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; // this ensures the image fills the square
-  }
-`;
-
-interface PhotoGalleryProps {
-  setGalleryItem: (item: GalleryImages.Item | null) => void;
-}
-
-const PhotoGallery: FC<PhotoGalleryProps> = React.memo(({ setGalleryItem }) => {
+const PhotoGallery: FC = React.memo(() => {
   const { data, loading, error } = useQuery<GalleryImages.Root>(
     GALLERY_GET_ALL,
     {
@@ -61,6 +26,7 @@ const PhotoGallery: FC<PhotoGalleryProps> = React.memo(({ setGalleryItem }) => {
   );
 
   const [items, setItems] = React.useState<GalleryImages.Item[]>([]);
+  const setImage = useImageModal(store => store.setImage);
 
   React.useEffect(() => {
     if (!loading) {
@@ -76,7 +42,7 @@ const PhotoGallery: FC<PhotoGalleryProps> = React.memo(({ setGalleryItem }) => {
       <HeadTextWrapper>
         <HeadText>Фото нашей мебели</HeadText>
       </HeadTextWrapper>
-      <GalleryGrid setModalItem={setGalleryItem} items={items} />
+      <GalleryGrid setModalItem={setImage} items={items} />
       <PrimaryButton
         onClick={() => navigate("/gallery")}
         css={{

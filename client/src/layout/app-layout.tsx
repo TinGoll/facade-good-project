@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { ThemeProvider } from "@emotion/react";
 import theme from "../theme";
+import { ImageModal } from "../components/modals";
 
 interface AppLayoutProps {
   children?: React.ReactNode;
 }
 const AppLayout = ({ children }: AppLayoutProps) => {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  const [open, setOpen] = useState<boolean>(true);
+  return (
+    <ThemeProvider theme={theme}>
+      {children}
+      <ImageModal />
+    </ThemeProvider>
+  );
 };
 
 export default AppLayout;

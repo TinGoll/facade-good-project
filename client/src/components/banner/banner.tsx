@@ -1,7 +1,6 @@
 import { css, useTheme } from "@emotion/react";
 import React, { FC, useEffect, useState } from "react";
 import { FacadeGood } from "../../app-types";
-import { navigate } from "gatsby";
 import {
   Box,
   ButtonArrowDown,

@@ -15,22 +15,11 @@ import {
 import { FacadeGood } from "../../app-types";
 import CatalogImages from "../../components/catalog/catalog-images";
 import { navigate } from "gatsby";
-import { GalleryImages } from "../../gatsby-plugin-apollo/queries/gallery.query";
-import GalleryModalWrapper from "../../components/image-grid/gallery-modal-wrapper";
 import ScrollToTop from "../../components/scroll/scroll-to-top";
 
 const AccessoriesPage: React.FC<PageProps> = ({ location, params }) => {
   const params1 = new URLSearchParams(location.search);
   const parameter1 = params1.get("test");
-
-  /******************************************** */
-  // Для открытия фото в модальном окне
-  const [galleryItem, setGalleryItem] =
-    React.useState<GalleryImages.Item | null>(null);
-  const onCloseModalHandler = React.useCallback(() => {
-    setGalleryItem(null);
-  }, []);
-  /******************************************** */
 
   return (
     <AppLayout>
@@ -72,13 +61,9 @@ const AccessoriesPage: React.FC<PageProps> = ({ location, params }) => {
               </HeadText>
             </HeadTextWrapper>
           </Box>
-          <CatalogImages
-            category="Комплектующие"
-            setGalleryItem={setGalleryItem}
-          />
+          <CatalogImages category="Комплектующие" />
         </Container>
       </Main>
-      <GalleryModalWrapper item={galleryItem} onClose={onCloseModalHandler} />
       <SiteFooter />
     </AppLayout>
   );

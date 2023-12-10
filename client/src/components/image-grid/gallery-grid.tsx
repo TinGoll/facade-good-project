@@ -67,7 +67,7 @@ export const ImageWrapper = styled(Box)`
 interface GalleryGridProps extends EmotionProps<HTMLDivElement> {
   items?: GalleryImages.Item[];
   imagesize?: number;
-  setModalItem?: (item: GalleryImages.Item) => void;
+  setModalItem?: (name: string) => void;
 }
 
 const GalleryGrid = ({
@@ -77,7 +77,8 @@ const GalleryGrid = ({
 }: GalleryGridProps & React.ClassAttributes<HTMLDivElement>) => {
   const openImageHandler = (item: GalleryImages.Item) => {
     if (setModalItem && typeof setModalItem === "function") {
-      setModalItem(item);
+      const fileName = item.images[0]?.filename || "";
+      setModalItem(fileName);
     }
   };
 

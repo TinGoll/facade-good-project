@@ -1,0 +1,5 @@
+.image {
+  object-fit: cover;
+  max-height: 84vh;
+  max-width: 80vw;
+}

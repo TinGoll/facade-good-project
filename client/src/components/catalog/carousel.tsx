@@ -10,13 +10,8 @@ import {
   Card,
   CardTitle,
   CardImgBox,
-  CardDescription,
-  Divider,
-  CardParams,
-  CardParamItem,
   CardFooter,
   CardPrice,
-  CardButton,
   CardSchemeBox,
   Typography,
   Box,
@@ -47,7 +42,11 @@ const Carousel: React.FC<CarouselProps> = ({ items = [], loading, error }) => {
   }
 
   if (error) {
-    return <div>Ошибка загрузки: {`${GATSBY_API_HOST}:${GATSBY_API_PORT} - ${error}`}</div>;
+    return (
+      <div>
+        Ошибка загрузки: {`${GATSBY_API_HOST}:${GATSBY_API_PORT} - ${error}`}
+      </div>
+    );
   }
 
   return (
@@ -133,7 +132,7 @@ const Carousel: React.FC<CarouselProps> = ({ items = [], loading, error }) => {
               </CardParams> */}
 
               {scheme.length ? (
-                <CardSchemeBox css={{ marginTop: 10 }} schemeheight={60}>
+                <CardSchemeBox css={{ marginTop: 10 }} schemeheight={"auto"}>
                   <img
                     className="SwiperImg"
                     src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
@@ -175,12 +174,8 @@ const Carousel: React.FC<CarouselProps> = ({ items = [], loading, error }) => {
           </SwiperSlide>
         );
       })}
-
-      {/* <div className="swiper-button-prev"></div>
-      <div className="swiper-button-next"></div> */}
     </Swiper>
   );
 };
 
 export default Carousel;
-

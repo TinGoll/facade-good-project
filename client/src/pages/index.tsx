@@ -16,16 +16,9 @@ import SiteFooter from "../components/footer/site-footer";
 import SiteHeadder from "../components/header/site-header";
 import { SEO } from "../components/seo";
 import { useEffect } from "react";
-import GalleryModalWrapper from "../components/image-grid/gallery-modal-wrapper";
-import { GalleryImages } from "../gatsby-plugin-apollo/queries/gallery.query";
 
-const IndexPage: React.FC<PageProps> = ({ location, params }) => {
-  const [galleryItem, setGalleryItem] =
-    React.useState<GalleryImages.Item | null>(null);
 
-  const onCloseModalHandler = React.useCallback(() => {
-    setGalleryItem(null);
-  }, []);
+const IndexPage: React.FC<PageProps> = ({ location }) => {
 
   // const params1 = new URLSearchParams(location.search);
   // const parameter1 = params1.get("test");
@@ -73,13 +66,12 @@ const IndexPage: React.FC<PageProps> = ({ location, params }) => {
           <AboutCompany />
           <TextBlock />
           <HowToWork />
-          <PhotoGallery setGalleryItem={setGalleryItem} />
+          <PhotoGallery />
           <OurProduction />
           <MapComponent />
           <SiteFooter />
         </Box>
       </Main>
-      <GalleryModalWrapper item={galleryItem} onClose={onCloseModalHandler} />
     </AppLayout>
   );
 };

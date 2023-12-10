@@ -298,7 +298,7 @@ export const ButtonPaginationLeft = (
 
 export const Divider = styled(Box)<
   EmotionProps<HTMLDivElement> & { width?: number; my?: number }
->(({ my, theme, width }) => ({
+>(({ my, width }) => ({
   marginTop: my ? my : 0,
   marginBottom: my ? my : 0,
   width,
@@ -311,17 +311,17 @@ export const Divider = styled(Box)<
 // Карта
 
 export const Card = styled(Box)(({ theme }) => ({
-  minWidth: 345,
-  height: 656,
+  minWidth: 355,
+  height: 666,
   background: theme.colors.white,
   border: "1px solid #DEDEDE",
-  // boxShadow: "0px 12px 26px rgba(0, 0, 0, 0.18)",
   backdropFilter: "blur(5px)",
   borderRadius: "10px",
   boxSizing: "border-box",
   position: "relative",
   padding: "15px",
   paddingBottom: 67,
+  userSelect: 'none'
 }));
 
 export const CardFooter = styled(Box)(({ theme }) => ({
@@ -348,7 +348,7 @@ export const CardTitle = ({
           textAlign: "left",
           marginBottom: 10,
           maxHeight: 42,
-          lineHeight: '0.9em',
+          lineHeight: "0.9em",
           ...theme.typography.cardName,
         },
         ...(Array.isArray(props.css) ? props.css : [props.css]),
@@ -369,9 +369,8 @@ export const CardImgBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-export const CardSchemeBox = styled(Box)<{ schemeheight?: number }>(
+export const CardSchemeBox = styled(Box)<{ schemeheight?: number | string }>(
   ({ theme, schemeheight = 100 }) => ({
-    // position: 'relative',
     width: "100%",
     height: schemeheight,
     borderRadius: "5px",

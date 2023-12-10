@@ -55,6 +55,7 @@ interface Props extends EmotionProps<HTMLDivElement> {
   loading?: boolean;
   onEdit?: (item: GalleryImages.Item, files: Files) => void;
   onDelete?: (id: string) => void;
+  onImage?: (name: string) => void;
 }
 
 const ProductCard: React.FC<Props> = ({
@@ -64,6 +65,7 @@ const ProductCard: React.FC<Props> = ({
   loading,
   onEdit,
   onDelete,
+  onImage,
   ...props
 }) => {
   const theme = useTheme() as FacadeGood.CustomTheme;
@@ -108,8 +110,12 @@ const ProductCard: React.FC<Props> = ({
     setFilesData({ ...filesData, scheme: files });
   };
 
+  const omImageHandler = (name: string) => {
+    typeof onImage === "function" && onImage(name);
+  };
+
   return (
-    <Card {...props}>
+    <Card {...props} onClick={() => omImageHandler(imageFilename)}>
       <PanelContainer>
         <EditableWrapper
           edited={editMode}
@@ -168,8 +174,13 @@ const ProductCard: React.FC<Props> = ({
         )}
       </CardImgBox>
       <CardSchemeBox
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          omImageHandler(schemeFilename);
+        }}
         css={{ marginTop: 10, position: "relative" }}
-        schemeheight={60}
+        schemeheight={"auto"}
       >
         {editMode && (
           <AbsoluteBox>
@@ -225,7 +236,7 @@ const ProductCard: React.FC<Props> = ({
         </Box>
         <EditableWrapper
           edited={editMode}
-          text={<CardPrice>{item.params ? `${item.params}` : ""}</CardPrice>}
+          text={<CardPrice>{item.params ? `${item.params} ₽` : ""}</CardPrice>}
         >
           <Textbox
             type="text"
