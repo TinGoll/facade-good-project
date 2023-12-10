@@ -21,6 +21,7 @@
     "@emotion/styled": "^11.10.6",
     "@emotion/types": "^0.7.0",
     "@mdx-js/react": "^2.3.0",
+    "@react-hook/media-query": "^1.1.1",
     "axios": "^1.4.0",
     "framer-motion": "^10.0.1",
     "gatsby": "^5.6.1",
@@ -47,7 +48,8 @@
     "react-select": "^5.7.3",
     "sweetalert2": "^11.4.8",
     "sweetalert2-react-content": "^5.0.7",
-    "swiper": "^9.0.5"
+    "swiper": "^9.0.5",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.36",
