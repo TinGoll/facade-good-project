@@ -210,7 +210,7 @@ const MobileMenu: FC<MobileMenuProps> = memo(
             transition: "0.7s ease-in-out",
           }}
         >
-          <MobileMenuButton onClick={() => onClose()} css={{ zIndex: 9999 }}>
+          <MobileMenuButton onClick={onClose} css={{ zIndex: 9999 }}>
             <SvgClose />
           </MobileMenuButton>
         </Box>
@@ -307,6 +307,14 @@ const SiteHeadder = React.memo((props: { stycky?: boolean }) => {
       };
     }
   }, []);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [open]);
 
   function handleClick() {
     window.open(`tel:${PHONE_NUMBER}`);

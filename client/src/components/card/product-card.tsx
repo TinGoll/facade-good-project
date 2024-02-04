@@ -236,7 +236,7 @@ const ProductCard: React.FC<Props> = ({
         </Box>
         <EditableWrapper
           edited={editMode}
-          text={<CardPrice>{item.params ? `${item.params} ₽` : ""}</CardPrice>}
+          text={<CardPrice>{item.params ? `${item.params} ₽ м²` : ""}</CardPrice>}
         >
           <Textbox
             type="text"

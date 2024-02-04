@@ -68,7 +68,7 @@ const MdfPage: React.FC<PageProps> = ({ location, params }) => {
               </HeadText>
             </HeadTextWrapper>
           </Box>
-          <CatalogImages category="МДФ" setGalleryItem={setGalleryItem} />
+          <CatalogImages category="МДФ" />
         </Container>
       </Main>
       <GalleryModalWrapper item={galleryItem} onClose={onCloseModalHandler} />

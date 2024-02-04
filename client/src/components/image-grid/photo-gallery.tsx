@@ -32,7 +32,8 @@ const PhotoGallery: FC = React.memo(() => {
     if (!loading) {
       if (data) {
         const { findAll: arr = [] } = data;
-        setItems([...arr]);
+        const sortedArray = [...arr].sort((a, b) => Number(b.id) - Number(a.id));
+        setItems(sortedArray.slice(0, 8));
       }
     }
   }, [loading, data]);

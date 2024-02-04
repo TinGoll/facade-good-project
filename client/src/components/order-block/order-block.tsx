@@ -28,150 +28,152 @@ const OrderBlock = React.memo(() => {
   } as any;
 
   return (
-    <SiteSection
-      id="order"
-      css={css`
-        width: 100%;
-        position: relative;
-        margin-top: 100px;
-      `}
-    >
-      <Box
-        css={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "column",
-          [theme.mq.tablet]: { flexDirection: "row" },
-        }}
+    <>
+      <Box id="order" />
+      <SiteSection
+        css={css`
+          width: 100%;
+          position: relative;
+          margin-top: 60px;
+        `}
       >
         <Box
           css={{
-            backgroundColor: theme.colors.bg1,
+            position: "absolute",
+            top: 0,
+            left: 0,
             width: "100%",
             height: "100%",
-            [theme.mq.tablet]: {
-              width: "50%",
-              height: "100%",
-            },
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "column",
+            [theme.mq.tablet]: { flexDirection: "row" },
           }}
         >
-          <StaticImage
-            className={styles.Img}
-            alt="Заказать кухню из массива"
-            src="../../images/order-block/order-block-img1.png"
-            quality={60}
-          />
+          <Box
+            css={{
+              backgroundColor: theme.colors.bg1,
+              width: "100%",
+              height: "100%",
+              [theme.mq.tablet]: {
+                width: "50%",
+                height: "100%",
+              },
+            }}
+          >
+            <StaticImage
+              className={styles.Img}
+              alt="Заказать кухню из массива"
+              src="../../images/order-block/order-block-img1.png"
+              quality={60}
+            />
+          </Box>
+          <Box
+            css={{
+              backgroundColor: theme.colors.bg0,
+              width: "100%",
+              height: "100%",
+              [theme.mq.tablet]: {
+                width: "50%",
+                height: "100%",
+              },
+            }}
+          >
+            <StaticImage
+              className={styles.Img}
+              alt="Заказать кухню из МДФ"
+              src="../../images/order-block/order-block-img2.png"
+              quality={60}
+            />
+          </Box>
         </Box>
-        <Box
+
+        <Container
           css={{
-            backgroundColor: theme.colors.bg0,
-            width: "100%",
+            position: "relative",
             height: "100%",
-            [theme.mq.tablet]: {
-              width: "50%",
-              height: "100%",
-            },
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gridTemplateRows: "1fr",
+            [theme.mq.tablet]: { gridTemplateColumns: "1fr 1fr" },
           }}
         >
-          <StaticImage
-            className={styles.Img}
-            alt="Заказать кухню из МДФ"
-            src="../../images/order-block/order-block-img2.png"
-            quality={60}
-          />
-        </Box>
-      </Box>
-
-      <Container
-        css={{
-          position: "relative",
-          height: "100%",
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gridTemplateRows: "1fr",
-          [theme.mq.tablet]: { gridTemplateColumns: "1fr 1fr" },
-        }}
-      >
-        <Box css={flexBoxStyles}>
-          <Box>
-            <Typography
-              css={{
-                ...theme.typography.headerBlockBlack,
-                textAlign: "center",
-                fontSize: "32px",
-                [theme.mq.desktop]: { fontSize: "48px" },
-              }}
-            >
-              Фасады из массива дуба, ясеня, ольхи
-            </Typography>
-            <Typography
-              css={{
-                fontWeight: 400,
-                lineHeight: "36px",
-                fontSize: "18px",
-                textAlign: "center",
-                marginTop: 20,
-                color: theme.colors.white,
-                [theme.mq.desktop]: { fontSize: "28px" },
-              }}
-            >
-              Для тех кто ценит натуральную древесину
-            </Typography>
-          </Box>
-          <Box>
-            <PrimaryButton
-              onClick={() => navigate("/order")}
-              css={(theme) => ({ width: 210 })}
-            >
-              Сделать заказ
-            </PrimaryButton>
-          </Box>
-        </Box>
-
-        <Box css={flexBoxStyles}>
-          <Box>
-            <Typography
-              css={{
-                ...theme.typography.headerBlockBlack,
-                textAlign: "center",
-                fontSize: "32px",
-                [theme.mq.desktop]: { fontSize: "48px" },
-              }}
-            >
-              Фасады из МДФ – любая фрезеровка
-            </Typography>
-            <Typography
-              css={{
-                fontWeight: 400,
-                lineHeight: "36px",
-                fontSize: "18px",
-                textAlign: "center",
-                marginTop: 20,
-                color: theme.colors.white,
-                [theme.mq.desktop]: { fontSize: "28px" },
-              }}
-            >
-              Изготовим по вашему дизайну, МДФ фасады, панели, декоративные
-              элементы интерьера
-            </Typography>
+          <Box css={flexBoxStyles}>
+            <Box>
+              <Typography
+                css={{
+                  ...theme.typography.headerBlockBlack,
+                  textAlign: "center",
+                  fontSize: "32px",
+                  [theme.mq.desktop]: { fontSize: "48px" },
+                }}
+              >
+                Фасады из массива дуба, ясеня, ольхи
+              </Typography>
+              <Typography
+                css={{
+                  fontWeight: 400,
+                  lineHeight: "36px",
+                  fontSize: "18px",
+                  textAlign: "center",
+                  marginTop: 20,
+                  color: theme.colors.white,
+                  [theme.mq.desktop]: { fontSize: "28px" },
+                }}
+              >
+                Для тех кто ценит натуральную древесину
+              </Typography>
+            </Box>
+            <Box>
+              <PrimaryButton
+                onClick={() => navigate("/order")}
+                css={(theme) => ({ width: 210 })}
+              >
+                Сделать заказ
+              </PrimaryButton>
+            </Box>
           </Box>
 
-          <Box>
-            <PrimaryButton
-              onClick={() => navigate("/order")}
-              css={(theme) => ({ width: 210 })}
-            >
-              Сделать заказ
-            </PrimaryButton>
+          <Box css={flexBoxStyles}>
+            <Box>
+              <Typography
+                css={{
+                  ...theme.typography.headerBlockBlack,
+                  textAlign: "center",
+                  fontSize: "32px",
+                  [theme.mq.desktop]: { fontSize: "48px" },
+                }}
+              >
+                Фасады из МДФ – любая фрезеровка
+              </Typography>
+              <Typography
+                css={{
+                  fontWeight: 400,
+                  lineHeight: "36px",
+                  fontSize: "18px",
+                  textAlign: "center",
+                  marginTop: 20,
+                  color: theme.colors.white,
+                  [theme.mq.desktop]: { fontSize: "28px" },
+                }}
+              >
+                Изготовим по вашему дизайну, МДФ фасады, панели, декоративные
+                элементы интерьера
+              </Typography>
+            </Box>
+
+            <Box>
+              <PrimaryButton
+                onClick={() => navigate("/order")}
+                css={(theme) => ({ width: 210 })}
+              >
+                Сделать заказ
+              </PrimaryButton>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </SiteSection>
+        </Container>
+      </SiteSection>
+    </>
   );
 });
 

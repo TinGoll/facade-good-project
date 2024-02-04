@@ -75,6 +75,7 @@ const GalleryGrid = ({
   setModalItem,
   ...props
 }: GalleryGridProps & React.ClassAttributes<HTMLDivElement>) => {
+  
   const openImageHandler = (item: GalleryImages.Item) => {
     if (setModalItem && typeof setModalItem === "function") {
       const fileName = item.images[0]?.filename || "";

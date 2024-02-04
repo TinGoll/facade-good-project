@@ -19,19 +19,10 @@ import {
   GALLERY_GET_ALL,
 } from "../gatsby-plugin-apollo/queries/gallery.query";
 import GalleryGrid from "../components/image-grid/gallery-grid";
-import GalleryModalWrapper from "../components/image-grid/gallery-modal-wrapper";
 import ScrollToTop from "../components/scroll/scroll-to-top";
+import { useImageModal } from "../stores";
 
 const GalleryPage = () => {
-  /******************************************** */
-  // Для открытия фото в модальном окне
-  const [galleryItem, setGalleryItem] =
-    React.useState<GalleryImages.Item | null>(null);
-  const onCloseModalHandler = React.useCallback(() => {
-    setGalleryItem(null);
-  }, []);
-  /******************************************** */
-
   const { data, loading, error } = useQuery<GalleryImages.Root>(
     GALLERY_GET_ALL,
     {
@@ -42,11 +33,16 @@ const GalleryPage = () => {
   );
   const [items, setItems] = React.useState<GalleryImages.Item[]>([]);
 
+  const setImage = useImageModal((store) => store.setImage);
+
   React.useEffect(() => {
     if (!loading) {
       if (data) {
         const { findAll: arr = [] } = data;
-        setItems([...arr]);
+        const sortedArray = [...arr].sort(
+          (a, b) => Number(b.id) - Number(a.id)
+        );
+        setItems(sortedArray);
       }
     }
   }, [loading, data]);
@@ -92,14 +88,9 @@ const GalleryPage = () => {
               </HeadText>
             </HeadTextWrapper>
           </Box>
-          <GalleryGrid
-            setModalItem={setGalleryItem}
-            items={items}
-            imagesize={380}
-          />
+          <GalleryGrid setModalItem={setImage} items={items} imagesize={380} />
         </Container>
       </Main>
-      <GalleryModalWrapper item={galleryItem} onClose={onCloseModalHandler} />
       <SiteFooter />
     </AppLayout>
   );

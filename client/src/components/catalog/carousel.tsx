@@ -23,6 +23,7 @@ import { GATSBY_API_HOST, GATSBY_API_PORT } from "../../settings/api.settings";
 import { useTheme } from "@emotion/react";
 import { FacadeGood } from "../../app-types";
 import { getSubtitle } from "../../utils/get-subtitle";
+import ProductCard from "../card/product-card";
 
 const LINK_TYPE1: CatalogCategory = "Массив";
 const LINK_TYPE2: CatalogCategory = "МДФ";
@@ -104,73 +105,18 @@ const Carousel: React.FC<CarouselProps> = ({ items = [], loading, error }) => {
 
         return (
           <SwiperSlide key={item.id}>
-            <Card
-              css={{
-                cursor: "pointer",
-                ":hover": {
-                  boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.06)",
-                },
-              }}
-              onClick={() => navigate(link)}
-            >
-              <CardTitle>{`Фасад: ${item.title}`}</CardTitle>
-              <CardImgBox>
-                {images.length && (
-                  <img
-                    className="SwiperImg"
-                    src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${images[0].filename}.webp`}
-                    alt={item.title}
-                  />
-                )}
-              </CardImgBox>
-              {/* <CardDescription>{item.subtitle}</CardDescription> */}
-              {/* <Divider my={15} /> */}
-              {/* <CardParams>
-                <CardParamItem>234х546</CardParamItem>
-                <CardParamItem>234х546</CardParamItem>
-                <CardParamItem>234х546</CardParamItem>
-              </CardParams> */}
-
-              {scheme.length ? (
-                <CardSchemeBox css={{ marginTop: 10 }} schemeheight={"auto"}>
-                  <img
-                    className="SwiperImg"
-                    src={`${GATSBY_API_HOST}:${GATSBY_API_PORT}/images/${scheme[0].filename}.webp`}
-                    alt={item.title}
-                  />
-                </CardSchemeBox>
-              ) : (
-                <CardSchemeBox
-                  css={{ marginTop: 10 }}
-                  schemeheight={60}
-                ></CardSchemeBox>
-              )}
-
-              <CardFooter>
-                <Box
-                  css={{
-                    flexGrow: 1,
-                    paddingLeft: 20,
-                  }}
-                >
-                  <Typography
-                    css={{
-                      fontWeight: 400,
-                      color: theme.colors.cardTextSecondary,
-                    }}
-                  >{`Материал: ${getSubtitle(item.subtitle)[0]}`}</Typography>
-                  {getSubtitle(item.subtitle)[1] && (
-                    <Typography
-                      css={{
-                        fontWeight: 400,
-                        color: theme.colors.cardTextSecondary,
-                      }}
-                    >{`(${getSubtitle(item.subtitle)[1]})`}</Typography>
-                  )}
-                </Box>
-                <CardPrice>{item.params ? `${item.params}` : ""}</CardPrice>
-              </CardFooter>
-            </Card>
+            <Box onClick={() => navigate(link)}>
+              <ProductCard
+                item={item}
+                title="Фасад"
+                css={{
+                  cursor: "pointer",
+                  ":hover": {
+                    boxShadow: "4px 2px 8px rgba(0, 0, 0, 0.1)",
+                  },
+                }}
+              />
+            </Box>
           </SwiperSlide>
         );
       })}

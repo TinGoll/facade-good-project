@@ -72,7 +72,7 @@ const MassivePage: React.FC<PageProps> = ({ location, params }) => {
               </HeadText>
             </HeadTextWrapper>
           </Box>
-          <CatalogImages category="Массив" setGalleryItem={setGalleryItem} />
+          <CatalogImages category="Массив" />
         </Container>
       </Main>
       <GalleryModalWrapper item={galleryItem} onClose={onCloseModalHandler} />
